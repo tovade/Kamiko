@@ -1,12 +1,12 @@
-import { Message, MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js';
-import { IContext } from '../../utils/interfaces';
-import Command from '../../structures/Command';
-import DiscordClient from '../../structures/DiscordClient';
-import { formatSeconds } from '../../utils/functions';
+import { Message, MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
+import { IContext } from '../../utils/interfaces'
+import Command from '../../structures/Command'
+import DiscordClient from '../../structures/DiscordClient'
+import { formatSeconds } from '../../utils/functions'
 
 interface IGroup {
-    name: string;
-    commands: string[];
+    name: string
+    commands: string[]
 }
 
 export default class HelpCommand extends Command {
@@ -16,28 +16,28 @@ export default class HelpCommand extends Command {
             group: 'General',
             description: 'Shows information about commands and groups.',
             cooldown: 10
-        });
+        })
     }
 
     getAvailableGroups(message: Message): IGroup[] {
-        const registry = this.client.registry;
-        const groupKeys = registry.getAllGroupNames();
-        const groups: IGroup[] = [];
+        const registry = this.client.registry
+        const groupKeys = registry.getAllGroupNames()
+        const groups: IGroup[] = []
 
         groupKeys.forEach(group => {
-            const commandsInGroup = registry.findCommandsInGroup(group) as string[];
-            const commands: string[] = [];
+            const commandsInGroup = registry.findCommandsInGroup(group) as string[]
+            const commands: string[] = []
 
             commandsInGroup.forEach(commandName => {
-                const command = registry.findCommand(commandName) as Command;
-                if (!command.isUsable(message)) return;
-                commands.push(commandName);
-            });
+                const command = registry.findCommand(commandName) as Command
+                if (!command.isUsable(message)) return
+                commands.push(commandName)
+            })
 
-            if (commands.length) groups.push({ name: group, commands });
-        });
+            if (commands.length) groups.push({ name: group, commands })
+        })
 
-        return groups;
+        return groups
     }
 
     async sendHelpMessage(message: Message, select: MessageSelectMenu) {
@@ -48,27 +48,27 @@ export default class HelpCommand extends Command {
             footer: {
                 text: `Type "${this.client.config.prefix}help [command-name]" for more information.`
             }
-        });
-        const ActionRow = new MessageActionRow().addComponents([select]);
+        })
+        const ActionRow = new MessageActionRow().addComponents([select])
 
-        await message.channel.send({ embeds: [embed], components: [ActionRow] });
+        await message.channel.send({ embeds: [embed], components: [ActionRow] })
     }
 
     async run(ctx: IContext) {
-        const { message, args } = ctx;
-        const menu = this.createSelectMenu(message);
-        const groups = this.getAvailableGroups(message);
-        if (!args[0]) return await this.sendHelpMessage(message, menu);
+        const { message, args } = ctx
+        const menu = this.createSelectMenu(message)
+        const groups = this.getAvailableGroups(message)
+        if (!args[0]) return await this.sendHelpMessage(message, menu)
 
-        const command = this.client.registry.findCommand(args[0].toLocaleLowerCase());
-        if (!command) return await this.sendHelpMessage(message, menu);
-        var isAvailable = false;
+        const command = this.client.registry.findCommand(args[0].toLocaleLowerCase())
+        if (!command) return await this.sendHelpMessage(message, menu)
+        var isAvailable = false
 
         groups.forEach(group => {
-            if (group.commands.includes(command.info.name)) isAvailable = true;
-        });
+            if (group.commands.includes(command.info.name)) isAvailable = true
+        })
 
-        if (!isAvailable) return await this.sendHelpMessage(message, menu);
+        if (!isAvailable) return await this.sendHelpMessage(message, menu)
 
         const embed = new MessageEmbed({
             color: this.client.config.color,
@@ -113,18 +113,18 @@ export default class HelpCommand extends Command {
             footer: {
                 text: '© Kamiko'
             }
-        });
+        })
 
         if (command.info.require) {
-            if (command.info.require.developer) embed.setFooter('This is a developer command.');
-            if (command.info.require.permissions) embed.addField('Permission Requirements', command.info.require.permissions.map(x => `\`${x}\``).join('\n'));
+            if (command.info.require.developer) embed.setFooter('This is a developer command.')
+            if (command.info.require.permissions) embed.addField('Permission Requirements', command.info.require.permissions.map(x => `\`${x}\``).join('\n'))
         }
 
-        await message.channel.send({ embeds: [embed] });
+        await message.channel.send({ embeds: [embed] })
     }
     private createSelectMenu(message: Message) {
-        const menu = new MessageSelectMenu().setCustomId('HELP_CATEGORIES').setPlaceholder('Select a category').setMinValues(0).setMaxValues(1);
-        const groups = this.getAvailableGroups(message);
+        const menu = new MessageSelectMenu().setCustomId('HELP_CATEGORIES').setPlaceholder('Select a category').setMinValues(0).setMaxValues(1)
+        const groups = this.getAvailableGroups(message)
         groups.forEach(group => {
             menu.addOptions([
                 {
@@ -132,13 +132,13 @@ export default class HelpCommand extends Command {
                     description: `${this.toCapitalize(group.name)} commands`,
                     value: group.name
                 }
-            ]);
-        });
+            ])
+        })
 
-        return menu;
+        return menu
     }
     private toCapitalize(str: string) {
-        const split = str.split('');
-        return `${split[0].toUpperCase()}${split.slice(1, str.length).join('')}`;
+        const split = str.split('')
+        return `${split[0].toUpperCase()}${split.slice(1, str.length).join('')}`
     }
 }
