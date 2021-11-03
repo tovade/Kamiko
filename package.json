@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Discord bot made with Typescript",
   "scripts": {
-    "build": "yarn clean && tsc -p .",
+    "build": "tsc -p .",
     "start": "node dist/index.js",
     "dev": "nodemon -w ./src -w ./.env ./src/index.ts"
   },
