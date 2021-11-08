@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p .",
     "start": "node dist/index.js",
-    "dev": "nodemon -w ./src -w ./.env ./src/index.ts"
+    "dev": "nodemon -w ./src -w ./.env ./src/index.ts --use-transpile-only "
   },
   "author": "tovade",
   "license": "MIT",
