@@ -1,6 +1,6 @@
 {
   "name": "kamiko",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Discord bot made with Typescript",
   "scripts": {
     "build": "tsc -p .",
