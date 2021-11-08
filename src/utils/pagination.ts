@@ -27,7 +27,7 @@ export async function pagination(message: Message, embeds: MessageEmbed[]) {
             page--
             if (page < 0) page = embeds.length - 1
         } else if (i.customId === deleteButton.customId) {
-            collector.stop()
+            return collector.stop()
         }
         await i.update({
             embeds: [embeds[page]],
