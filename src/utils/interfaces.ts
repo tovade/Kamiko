@@ -1,27 +1,32 @@
-import { ThreadChannel, HexColorString, Channel, PartialDMChannel, GuildMember, Message, NewsChannel, PermissionString, Role, TextChannel, User, VoiceChannel } from 'discord.js';
+import { ThreadChannel, HexColorString, Channel, PartialDMChannel, GuildMember, Message, NewsChannel, PermissionString, Role, TextChannel, User, VoiceChannel } from 'discord.js'
 
 /**
  * Config interface for client.
  */
 export interface IConfig {
     /** Token of the client */
-    token: string;
+    token: string
 
     /** Prefix of the client */
-    prefix: string;
+    prefix: string
 
     /** Developer ids of the client */
-    developers: string[];
+    developers: string[]
 
     /**
      * Status of sending error message when user try to run unknown command.
      */
-    unknownErrorMessage: boolean;
+    unknownErrorMessage: boolean
 
     /**
      * The main color
      */
-    color: HexColorString;
+    color: HexColorString
+
+    /**
+     * The mongodb url
+     */
+    mongoUrl: string
 }
 
 /**
@@ -29,39 +34,39 @@ export interface IConfig {
  */
 export interface ICommandInfo {
     /** Name of the command */
-    name: string;
+    name: string
 
     /** Group name of the command */
-    group: string;
+    group: string
 
     /** Aliases of the command */
-    aliases?: string[];
+    aliases?: string[]
 
     /** Example usages */
-    examples?: string[];
+    examples?: string[]
 
     /** Description of the command */
-    description?: string;
+    description?: string
 
     /**
      * Time to wait for each use (seconds)
      *
      * Developers are not affected
      */
-    cooldown?: number;
+    cooldown?: number
 
     /** Status of the command */
-    enabled?: boolean;
+    enabled?: boolean
 
     /**
      * If enabled, command only runs in nsfw channels
      *
      * Developers are not affected
      */
-    onlyNsfw?: boolean;
+    onlyNsfw?: boolean
 
     /** Requirements of the command */
-    require?: ICommandRequire;
+    context?: ICommandRequire
 }
 
 /**
@@ -69,64 +74,69 @@ export interface ICommandInfo {
  */
 export interface ICommandRequire {
     /** If enabled, command requires developer permission to run */
-    developer?: boolean;
+    developer?: boolean
 
     /**
      * Command requires permission flags to run
      *
      * Developers are not affected
      */
-    permissions?: PermissionString[];
+    permissions?: PermissionString[]
 
     /**
      * Command requires a member to be runnable
      */
-    member?: boolean;
+    member?: boolean
 
     /**
      * Command requires a role to be runnable
      */
-    role?: boolean;
+    role?: boolean
 
     /**
      * Command requires a channel to be runnable
      */
-    channel?: boolean;
+    channel?: boolean
 
     /**
      * Command requires amount of arguments needed to be runnable
      */
-    args?: number;
+    args?: number
+
+    /**
+     * If the command can only be run in a guild.
+     */
+    guildOnly?: boolean
 }
 export interface IContext {
     /**
      * Message object
      */
-    message: Message;
+    message: Message
 
     /**
      * Arguments
      */
-    args: string[];
+    args: string[]
 
     /**
      * Mentions
      */
-    mentions: IMentions;
+    mentions: IMentions
 }
 export interface IMentions {
     /**
      * member mention
      */
-    member: GuildMember | null | undefined;
+    member: GuildMember | null | undefined
 
     /**
      * Channel mention
      */
-    channel: TextChannel | ThreadChannel | Channel | undefined | NewsChannel | PartialDMChannel;
+    channel: TextChannel | ThreadChannel | Channel | undefined | NewsChannel | PartialDMChannel
 
     /**
      * Role mention
      */
-    role: Role | undefined;
+    role: Role | undefined
 }

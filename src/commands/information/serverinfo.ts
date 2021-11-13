@@ -1,46 +1,49 @@
-import { Guild, MessageEmbed } from 'discord.js';
-import { IContext } from '../../utils/interfaces';
-const moment = require('moment');
+import { Guild, MessageEmbed } from 'discord.js'
+import { IContext } from '../../utils/interfaces'
+const moment = require('moment')
 const verificationLevels = {
     NONE: 'None',
     LOW: 'Low',
     MEDIUM: 'Medium',
     HIGH: 'High',
     VERY_HIGH: 'Very High'
-};
-import Command from '../../structures/Command';
-import DiscordClient from '../../structures/DiscordClient';
+}
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
 
-export default class TestCommand extends Command {
+export default class ServerInfoCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
             name: 'serverinfo',
             group: 'Information',
             description: 'Get serverinfo',
             aliases: ['server', 'guild', 'guildinfo'],
-            cooldown: 6
-        });
+            cooldown: 6,
+            context: {
+                guildOnly: true
+            }
+        })
     }
 
     async run(ctx: IContext) {
-        const { message } = ctx;
-        const guild = message.guild as Guild;
+        const { message } = ctx
+        const guild = message.guild as Guild
 
-        let members = guild.members.cache;
+        let members = guild.members.cache
         if (!members) {
-            members = await guild.members.fetch();
+            members = await guild.members.fetch()
         }
-        const botSize = members.filter(member => member.user.bot).size;
+        const botSize = members.filter(member => member.user.bot).size
 
-        const userSize = guild.memberCount - botSize;
+        const userSize = guild.memberCount - botSize
 
-        const channels = guild.channels.cache;
+        const channels = guild.channels.cache
 
-        const emojis = guild.emojis.cache;
+        const emojis = guild.emojis.cache
 
-        const createdAt = moment(message.guild?.createdTimestamp).format('LLLL');
+        const createdAt = moment(message.guild?.createdTimestamp).format('LLLL')
 
-        const owner = await guild.fetchOwner();
+        const owner = await guild.fetchOwner()
         const server_embed = new MessageEmbed({
             title: `:desktop: SERVER INFORMATION :desktop:`,
             fields: [
@@ -89,7 +92,7 @@ export default class TestCommand extends Command {
                 text: '© Kamiko'
             },
             color: this.client.config.color
-        });
-        return message.channel.send({ embeds: [server_embed] });
+        })
+        return message.channel.send({ embeds: [server_embed] })
     }
 }

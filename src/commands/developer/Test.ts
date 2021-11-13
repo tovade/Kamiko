@@ -1,8 +1,6 @@
-import { Message, Role } from 'discord.js';
-
-import Command from '../../structures/Command';
-import DiscordClient from '../../structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -11,15 +9,13 @@ export default class TestCommand extends Command {
             group: 'Developer',
             description: 'Test command for developers',
             examples: ['!test @Administrators HELLO'],
-            require: {
-                developer: true,
-                role: true,
-                args: 1
+            context: {
+                developer: true
             }
-        });
+        })
     }
     //As an example on how to cancel cooldowns
     async run(ctx: IContext, cancelCooldown: () => void) {
-        await ctx.message.reply(`${ctx.mentions.role?.name}, ${ctx.args[0]}`);
+        await ctx.message.reply(`the prefix here is${(await this.client.databases.guilds.get(ctx.message.guildId as string)).prefix}`)
     }
 }

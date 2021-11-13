@@ -1,7 +1,7 @@
 import { Message, MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
 import { IContext } from '../../utils/interfaces'
-import Command from '../../structures/Command'
-import DiscordClient from '../../structures/DiscordClient'
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { formatSeconds } from '../../utils/functions'
 
 interface IGroup {
@@ -115,9 +115,9 @@ export default class HelpCommand extends Command {
             }
         })
 
-        if (command.info.require) {
-            if (command.info.require.developer) embed.setFooter('This is a developer command.')
-            if (command.info.require.permissions) embed.addField('Permission Requirements', command.info.require.permissions.map(x => `\`${x}\``).join('\n'))
+        if (command.info.context) {
+            if (command.info.context.developer) embed.setFooter('This is a developer command.')
+            if (command.info.context.permissions) embed.addField('Permission Requirements', command.info.context.permissions.map(x => `\`${x}\``).join('\n'))
         }
 
         await message.channel.send({ embeds: [embed] })

@@ -1,6 +1,6 @@
 import { Channel, Guild, GuildMember, Permissions, Message, NewsChannel, PartialDMChannel, Role, TextChannel, ThreadChannel } from 'discord.js'
 import leven from '../utils/leven'
-import DiscordClient from '../structures/DiscordClient'
+import { DiscordClient } from '../lib/structures/DiscordClient'
 import { formatSeconds, isUserDeveloper } from '../utils/functions'
 import { IContext } from '../utils/interfaces'
 
@@ -23,7 +23,12 @@ export default class CommandHandler {
                 ]
             })
 
-        const prefix = client.config.prefix
+        let prefix
+        if (message.guild?.name) {
+            prefix = (await client.databases.guilds.get(message.guildId as string)).prefix as unknown as string
+        } else {
+            prefix = '!'
+        }
         if (message.content.toLocaleLowerCase().indexOf(prefix) !== 0) return
         const args = message.content.slice(prefix.length).trim().split(/ +/g)
         const command = (args.shift() as string).toLowerCase()
@@ -57,7 +62,17 @@ export default class CommandHandler {
             }
             return
         }
-
+        if (cmd.info.context?.guildOnly === true && message.channel.type !== 'GUILD_TEXT') {
+            return await message.channel.send({
+                embeds: [
+                    {
+                        color: 'RED',
+                        title: '🚨 Error',
+                        description: `${message.author}, This command is only available in a server.`
+                    }
+                ]
+            })
+        }
         if (cmd.info.enabled === false) return
         if (cmd.info.onlyNsfw === true && !(message.channel as TextChannel).nsfw && !isUserDeveloper(client, message.author.id))
             return await message.channel.send({
@@ -70,11 +85,11 @@ export default class CommandHandler {
                 ]
             })
         let mentions
-        if (cmd.info.require) {
-            if (cmd.info.require.developer && !isUserDeveloper(client, message.author.id)) return
-            if (cmd.info.require.permissions && !isUserDeveloper(client, message.author.id)) {
+        if (cmd.info.context) {
+            if (cmd.info.context.developer && !isUserDeveloper(client, message.author.id)) return
+            if (cmd.info.context.permissions && !isUserDeveloper(client, message.author.id)) {
                 const perms: string[] = []
-                cmd.info.require.permissions.forEach(permission => {
+                cmd.info.context.permissions.forEach(permission => {
                     if ((message.member as GuildMember).permissions.has(permission)) return
                     else return perms.push(`\`${permission}\``)
                 })
@@ -89,7 +104,7 @@ export default class CommandHandler {
                         ]
                     })
             }
-            if (cmd.info.require.member) {
+            if (cmd.info.context.member) {
                 const requir = await this.findMember(message, args, false)
                 if (!requir)
                     return await message.channel.send({
@@ -105,7 +120,7 @@ export default class CommandHandler {
                 mentions = {
                     member: requir
                 }
-            } else if (cmd.info.require.channel) {
+            } else if (cmd.info.context.channel) {
                 const requir = await this.findChannel(message, args, false)
                 if (!requir)
                     return await message.channel.send({
@@ -121,7 +136,7 @@ export default class CommandHandler {
                 mentions = {
                     channel: requir
                 }
-            } else if (cmd.info.require.role) {
+            } else if (cmd.info.context.role) {
                 const requir = await this.findRole(message, args, false)
                 if (!requir)
                     return await message.channel.send({
@@ -139,14 +154,14 @@ export default class CommandHandler {
                 }
             }
         }
-        if (cmd.info.require?.args) {
-            if (args.length < cmd.info.require?.args) {
+        if (cmd.info.context?.args) {
+            if (args.length < cmd.info.context?.args) {
                 return await message.channel.send({
                     embeds: [
                         {
                             color: '#FCE100',
                             title: '⚠ Missing Arguments.',
-                            description: `${message.author}, You must give ${cmd.info.require.args} arguments to run this command! If you don't know which arguments use !help [command] to see the full usage.`
+                            description: `${message.author}, You must give ${cmd.info.context.args} arguments to run this command! If you don't know which arguments use !help [command] to see the full usage.`
                         }
                     ]
                 })

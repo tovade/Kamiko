@@ -1,6 +1,6 @@
-import { IContext } from '../../utils/interfaces';
-import Command from '../../structures/Command';
-import DiscordClient from '../../structures/DiscordClient';
+import { IContext } from '../../utils/interfaces'
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -9,10 +9,10 @@ export default class TestCommand extends Command {
             group: 'General',
             description: 'Ping command.',
             cooldown: 5
-        });
+        })
     }
 
     async run(ctx: IContext) {
-        await ctx.message.reply(`My ping is \`${this.client.ws.ping}ms\``);
+        await ctx.message.reply(`My ping is \`${this.client.ws.ping}ms\``)
     }
 }

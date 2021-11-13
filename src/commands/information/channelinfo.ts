@@ -1,7 +1,7 @@
 import { Channel, ColorResolvable, MessageEmbed, StageChannel, TextChannel, VoiceChannel } from 'discord.js'
 const moment = require('moment')
-import Command from '../../structures/Command'
-import DiscordClient from '../../structures/DiscordClient'
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
 
 const types = {
@@ -25,8 +25,9 @@ export default class ChannelInfoCommand extends Command {
             group: 'Information',
             description: 'Get info about a channel',
             examples: ['!channelinfo #faq'],
-            require: {
-                channel: true
+            context: {
+                channel: true,
+                guildOnly: true
             }
         })
     }

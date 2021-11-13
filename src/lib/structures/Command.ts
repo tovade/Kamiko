@@ -1,9 +1,9 @@
 import { GuildMember, Message, TextChannel } from 'discord.js'
 
-import Logger from '../classes/Logger'
-import { isUserDeveloper } from '../utils/functions'
-import { ICommandInfo, IContext } from '../utils/interfaces'
-import DiscordClient from './DiscordClient'
+import Logger from '../../classes/Logger'
+import { isUserDeveloper } from '../../utils/functions'
+import { ICommandInfo, IContext } from '../../utils/interfaces'
+import { DiscordClient } from './DiscordClient'
 
 export default abstract class Command {
     /**
@@ -47,11 +47,11 @@ export default abstract class Command {
     isUsable(message: Message, checkNsfw: boolean = false): boolean {
         if (this.info.enabled === false) return false
         if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as TextChannel).nsfw && !isUserDeveloper(this.client, message.author.id)) return false
-        if (this.info.require) {
-            if (this.info.require.developer && !isUserDeveloper(this.client, message.author.id)) return false
-            if (this.info.require.permissions && !isUserDeveloper(this.client, message.author.id)) {
+        if (this.info.context) {
+            if (this.info.context.developer && !isUserDeveloper(this.client, message.author.id)) return false
+            if (this.info.context.permissions && !isUserDeveloper(this.client, message.author.id)) {
                 const perms: string[] = []
-                this.info.require.permissions.forEach(permission => {
+                this.info.context.permissions.forEach(permission => {
                     if ((message.member as GuildMember).permissions.has(permission)) return
                     else return perms.push(permission)
                 })

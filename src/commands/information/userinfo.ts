@@ -1,5 +1,5 @@
-import Command from '../../structures/Command'
-import DiscordClient from '../../structures/DiscordClient'
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
 import { MessageEmbed } from 'discord.js'
 import moment from 'moment'
@@ -11,8 +11,9 @@ export default class UserInfoCommand extends Command {
             group: 'Information',
             description: 'Get info on a member/user',
             examples: ['!userinfo @Tovade'],
-            require: {
-                member: true
+            context: {
+                member: true,
+                guildOnly: true
             }
         })
     }
