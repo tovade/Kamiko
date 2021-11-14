@@ -1,12 +1,12 @@
 import { createConnection } from 'typeorm'
-import { DiscordClient } from './DiscordClient'
+import { DiscordClient } from '../lib/structures/DiscordClient'
 import { resolve } from 'path'
 
 export class InitDatabase {
     static async Init(client: DiscordClient) {
         await createConnection({
             database: 'Data',
-            entities: ['src/database/Entities/*.ts', '../dist/src/database/Entities/*.js'],
+            entities: [__dirname + '/Entities/*.{ts,js}'],
             migrations: ['src/migration/**/*.ts'],
             cli: {
                 entitiesDir: 'src/database/Entities',

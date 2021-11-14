@@ -1,7 +1,7 @@
 import Logger from '../classes/Logger'
 import { DiscordClient } from '../lib/structures/DiscordClient'
 import Event from '../lib/structures/Event'
-import { InitDatabase } from '../lib/structures/DatabaseConnection'
+import { InitDatabase } from '../database/DatabaseConnection'
 export default class ReadyEvent extends Event {
     constructor(client: DiscordClient) {
         super(client, 'ready')
