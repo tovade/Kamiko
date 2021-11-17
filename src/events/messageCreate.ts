@@ -10,7 +10,7 @@ export default class MessageEvent extends Event {
     }
 
     async run(message: Message) {
-        if (message.author.bot) return
+        if (message.author.bot || message.channel.type === 'DM') return
         await CommandHandler.handleCommand(this.client, message)
     }
 }

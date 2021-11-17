@@ -3,7 +3,7 @@ import 'moment-duration-format'
 import moment from 'moment-timezone'
 
 import { DiscordClient } from '../lib/structures/DiscordClient'
-
+import { Role, Message, GuildMember, Channel, TextChannel, ThreadChannel, NewsChannel, PartialDMChannel } from 'discord.js'
 const isConstructorProxyHandler = {
     construct() {
         return Object.prototype
@@ -48,4 +48,51 @@ export function formatSeconds(seconds: number, format: string = 'Y [year] M [mon
         }
     })
     return newStr.trim()
+}
+
+export async function findMember(message: Message, args: string[], allowAuthor: boolean = false): Promise<GuildMember | null | undefined> {
+    let member
+
+    member =
+        message.mentions.members?.first() ||
+        message.guild?.members.cache.get(args[0]) ||
+        message.guild?.members.cache.find(m => m.user.id === args[0]) ||
+        message.guild?.members.cache.find(m => m.user.tag === args[0]) ||
+        message.guild?.members.cache.find(m => m.user.username === args[0])
+    if (member?.partial) {
+        member = await member.fetch()
+    }
+    if (!member && allowAuthor) {
+        member = message.member
+    }
+
+    return member
+}
+
+export function findChannel(message: Message, args: string[], allowChannel: boolean = false): TextChannel | ThreadChannel | Channel | undefined | NewsChannel | PartialDMChannel {
+    let channel
+
+    channel =
+        message.mentions.channels.first() ||
+        message.guild?.channels.cache.get(args[0]) ||
+        message.guild?.channels.cache.find(r => r.name === args[0]) ||
+        message.guild?.channels.cache.find(r => r.name.startsWith(args[0]))
+
+    if (!channel && allowChannel) {
+        channel = message.channel
+    }
+    return channel
+}
+
+export function findRole(message: Message, args: string[], allowRole: boolean = false): Role | undefined {
+    let role
+    role =
+        message.mentions.roles.first() ||
+        message.guild?.roles.cache.get(args[0]) ||
+        message.guild?.roles.cache.find(r => r.name === args[0]) ||
+        message.guild?.roles.cache.find(r => r.name.startsWith(args[0]))
+    if (!role && allowRole) {
+        role = message.member?.roles.highest
+    }
+    return role
 }

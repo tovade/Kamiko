@@ -1,6 +1,6 @@
 {
   "name": "kamiko",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Discord bot made with Typescript",
   "scripts": {
     "build": "tsc -p .",
@@ -18,12 +18,14 @@
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.33",
     "mongodb": "^3.7.3",
+    "ms": "^2.1.3",
     "path": "^0.12.7",
     "require-all": "^3.0.0",
     "typeorm": "^0.2.40"
   },
   "devDependencies": {
     "@types/moment-duration-format": "^2.2.3",
+    "@types/ms": "^0.7.31",
     "@types/node": "^14.14.10",
     "@types/require-all": "^3.0.3",
     "nodemon": "^2.0.6",

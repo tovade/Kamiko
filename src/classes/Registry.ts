@@ -6,6 +6,7 @@ import RegistryError from '../errors/RegistryError'
 import Command from '../lib/structures/Command'
 import { DiscordClient } from '../lib/structures/DiscordClient'
 import Event from '../lib/structures/Event'
+import { Helper } from '../lib/structures/Helper'
 import SelectMenu from '../lib/structures/SelectMenuInteraction'
 import { isConstructor } from '../utils/functions'
 import Logger from './Logger'
@@ -30,6 +31,11 @@ export default class Registry {
      * Collection for event registration.
      */
     public events: Collection<string, Event>
+
+    /**
+     * Collection for helper registration.
+     */
+    public helpers: Collection<string, Helper>
 
     /**
      * Event paths
@@ -71,6 +77,7 @@ export default class Registry {
         this.groups = new Collection<string, string[]>()
         this.menus = new Collection<string, SelectMenu>()
         this.aliases = new Collection<string, Command>()
+        this.helpers = new Collection<string, Helper>()
     }
 
     constructor(client: DiscordClient) {
@@ -91,6 +98,44 @@ export default class Registry {
     }
 
     /**
+     * Registers a single helper
+     * @param helper Helper object
+     */
+    private registerHelper(helper: Helper) {
+        if (this.helpers.some(e => e.name === helper.name)) throw new RegistryError(`A helper with the name "${helper.name}" is already registered.`)
+
+        this.helpers.set(helper.name, helper)
+        helper.execute()
+        Logger.log('INFO', `Helper "${helper.name}" loaded.`)
+    }
+    /**
+     * Registers all helpers.
+     */
+    private registerAllHelpers() {
+        const helpers: any[] = []
+        requireAll({
+            dirname: path.join(__dirname, '../helpers'),
+            recursive: true,
+            filter: /\w*.[tj]s/g,
+            resolve: x => helpers.push(x),
+            map: name => {
+                return name
+            }
+        })
+
+        for (let helper of helpers) {
+            const valid = isConstructor(helper, Helper) || isConstructor(helper.default, Helper) || helper instanceof Helper || helper.default instanceof Helper
+            if (!valid) continue
+
+            if (isConstructor(helper, Helper)) helper = new helper(this.client)
+            else if (isConstructor(helper.default, Helper)) helper = new helper.default(this.client)
+            if (!(helper instanceof Helper)) throw new RegistryError(`Invalid event object to register: ${helper}`)
+
+            this.registerHelper(helper)
+        }
+    }
+
+    /**
      * Registers all events.
      */
     private registerAllEvents() {
@@ -107,7 +152,7 @@ export default class Registry {
             filter: /\w*.[tj]s/g,
             resolve: x => events.push(x),
             map: (name, filePath) => {
-                if (filePath.endsWith('.ts') || filePath.endsWith('.js')) this.menuPaths.push(path.resolve(filePath))
+                if (filePath.endsWith('.ts') || filePath.endsWith('.js')) this.eventPaths.push(path.resolve(filePath))
                 return name
             }
         })
@@ -286,6 +331,7 @@ export default class Registry {
         this.registerAllMenus()
         this.registerAllCommands()
         this.registerAllEvents()
+        this.registerAllHelpers()
     }
 
     /**

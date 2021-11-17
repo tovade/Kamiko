@@ -4,6 +4,7 @@ import Logger from '../../classes/Logger'
 import Registry from '../../classes/Registry'
 import { IConfig } from '../../utils/interfaces'
 import { GuildDatabaseManager } from '../../database/Manager/GuildManager'
+import { UserDatabaseManager } from '../../database/Manager/UserManager'
 export class DiscordClient extends Client {
     /**
      * Registry of the client.
@@ -19,7 +20,8 @@ export class DiscordClient extends Client {
      * Client databases
      */
     public databases = {
-        guilds: new GuildDatabaseManager()
+        guilds: new GuildDatabaseManager(),
+        users: new UserDatabaseManager()
     }
 
     /**

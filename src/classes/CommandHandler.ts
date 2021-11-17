@@ -1,7 +1,7 @@
-import { Channel, Guild, GuildMember, Permissions, Message, NewsChannel, PartialDMChannel, Role, TextChannel, ThreadChannel } from 'discord.js'
+import { Guild, GuildMember, Permissions, MessageButton, MessageActionRow, Message, MessageEmbed, TextChannel } from 'discord.js'
 import leven from '../utils/leven'
 import { DiscordClient } from '../lib/structures/DiscordClient'
-import { formatSeconds, isUserDeveloper } from '../utils/functions'
+import { formatSeconds, isUserDeveloper, findChannel, findMember, findRole } from '../utils/functions'
 import { IContext } from '../utils/interfaces'
 
 export default class CommandHandler {
@@ -22,13 +22,33 @@ export default class CommandHandler {
                     }
                 ]
             })
-
         let prefix
         if (message.guild?.name) {
             prefix = (await client.databases.guilds.get(message.guildId as string)).prefix as unknown as string
-        } else {
-            prefix = '!'
+        } else return
+        const prefixMention = new RegExp(`^<@!?${client.user?.id}>( |)$`)
+        if (message.content.match(prefixMention)) {
+            let ping = new MessageEmbed()
+                .setAuthor(client.user?.username as string, client.user?.displayAvatarURL({ dynamic: true }))
+                .setTitle(`Hello! I am ${client.user?.username} My prefix is ${prefix}`)
+                .addField('Usage:', `${prefix}help`)
+                .setDescription('Make sure to check out the links down below!')
+                .setFooter(message.guild?.name as string)
+                .setTimestamp()
+
+            const row = new MessageActionRow().addComponents(
+                new MessageButton().setLabel(`Support server!`).setURL('https://discord.gg/e9bYSySh5k').setStyle(5).setEmoji('❓'),
+
+                new MessageButton()
+                    .setLabel('Invite me!')
+                    .setURL('https://discord.com/api/oauth2/authorize?client_id=904321999302717500&permissions=0&scope=bot')
+                    .setStyle(5)
+                    .setEmoji('✉️')
+            )
+
+            await message.channel.send({ embeds: [ping], components: [row] })
         }
+
         if (message.content.toLocaleLowerCase().indexOf(prefix) !== 0) return
         const args = message.content.slice(prefix.length).trim().split(/ +/g)
         const command = (args.shift() as string).toLowerCase()
@@ -105,7 +125,7 @@ export default class CommandHandler {
                     })
             }
             if (cmd.info.context.member) {
-                const requir = await this.findMember(message, args, false)
+                const requir = await findMember(message, args, true)
                 if (!requir)
                     return await message.channel.send({
                         embeds: [
@@ -121,7 +141,7 @@ export default class CommandHandler {
                     member: requir
                 }
             } else if (cmd.info.context.channel) {
-                const requir = await this.findChannel(message, args, false)
+                const requir = await findChannel(message, args, false)
                 if (!requir)
                     return await message.channel.send({
                         embeds: [
@@ -137,7 +157,7 @@ export default class CommandHandler {
                     channel: requir
                 }
             } else if (cmd.info.context.role) {
-                const requir = await this.findRole(message, args, false)
+                const requir = await findRole(message, args, false)
                 if (!requir)
                     return await message.channel.send({
                         embeds: [
@@ -219,49 +239,5 @@ export default class CommandHandler {
         } catch (error) {
             await cmd.onError(message, error)
         }
-    }
-    static async findMember(message: Message, args: string[], allowAuthor: boolean = false): Promise<GuildMember | null | undefined> {
-        let member
-
-        member =
-            message.mentions.members?.first() ||
-            message.guild?.members.cache.get(args[0]) ||
-            message.guild?.members.cache.find(m => m.user.id === args[0]) ||
-            message.guild?.members.cache.find(m => m.user.tag === args[0]) ||
-            message.guild?.members.cache.find(m => m.user.username === args[0])
-        if (member?.partial) {
-            member = await member.fetch()
-        }
-        if (!member && allowAuthor) {
-            member = message.member
-        }
-
-        return member
-    }
-    static findChannel(message: Message, args: string[], allowChannel: boolean = false): TextChannel | ThreadChannel | Channel | undefined | NewsChannel | PartialDMChannel {
-        let channel
-
-        channel =
-            message.mentions.channels.first() ||
-            message.guild?.channels.cache.get(args[0]) ||
-            message.guild?.channels.cache.find(r => r.name === args[0]) ||
-            message.guild?.channels.cache.find(r => r.name.startsWith(args[0]))
-
-        if (!channel && allowChannel) {
-            channel = message.channel
-        }
-        return channel
-    }
-    static findRole(message: Message, args: string[], allowRole: boolean = false): Role | undefined {
-        let role
-        role =
-            message.mentions.roles.first() ||
-            message.guild?.roles.cache.get(args[0]) ||
-            message.guild?.roles.cache.find(r => r.name === args[0]) ||
-            message.guild?.roles.cache.find(r => r.name.startsWith(args[0]))
-        if (!role && allowRole) {
-            role = message.member?.roles.highest
-        }
-        return role
     }
 }

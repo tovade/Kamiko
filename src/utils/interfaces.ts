@@ -140,3 +140,36 @@ export interface IMentions {
      */
     role: Role | undefined
 }
+export interface Permissions {
+    ADMINISTRATOR: string
+    VIEW_AUDIT_LOG: string
+    VIEW_GUILD_INSIGHTS: string
+    MANAGE_GUILD: string
+    MANAGE_ROLES: string
+    MANAGE_CHANNELS: string
+    KICK_MEMBERS: string
+    BAN_MEMBERS: string
+    CREATE_INSTANT_INVITE: string
+    CHANGE_NICKNAME: string
+    MANAGE_NICKNAMES: string
+    MANAGE_EMOJIS: string
+    MANAGE_WEBHOOKS: string
+    VIEW_CHANNEL: string
+    SEND_MESSAGES: string
+    SEND_TTS_MESSAGES: string
+    MANAGE_MESSAGES: string
+    EMBED_LINKS: string
+    ATTACH_FILES: string
+    READ_MESSAGE_HISTORY: string
+    MENTION_EVERYONE: string
+    USE_EXTERNAL_EMOJIS: string
+    ADD_REACTIONS: string
+    CONNECT: string
+    SPEAK: string
+    STREAM: string
+    MUTE_MEMBERS: string
+    DEAFEN_MEMBERS: string
+    MOVE_MEMBERS: string
+    USE_VAD: string
+    PRIORITY_SPEAKER: string
+}
