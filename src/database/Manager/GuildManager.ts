@@ -30,6 +30,7 @@ export class GuildDatabaseManager {
         // @ts-ignore
         data[key] = value
         await this.repository.save(data)
+        await this.cache.set(id, data)
         return data
     }
     public async delete(id: Snowflake) {
