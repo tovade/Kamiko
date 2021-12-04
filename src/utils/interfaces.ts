@@ -3,8 +3,6 @@ import {
     PartialDMChannel, PermissionString, Role, TextChannel, ThreadChannel, User, VoiceChannel
 } from 'discord.js';
 
-import { channels } from '../config/config';
-
 /**
  * Config interface for client.
  */
@@ -36,7 +34,7 @@ export interface IConfig {
     /**
      * channels for the bot
      */
-    channels: channels
+    channels: any
 }
 
 /**
