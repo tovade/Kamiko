@@ -1,4 +1,9 @@
-import { ThreadChannel, HexColorString, Channel, PartialDMChannel, GuildMember, Message, NewsChannel, PermissionString, Role, TextChannel, User, VoiceChannel } from 'discord.js'
+import {
+    ApplicationCommandOption, Channel, GuildMember, HexColorString, Message, NewsChannel,
+    PartialDMChannel, PermissionString, Role, TextChannel, ThreadChannel, User, VoiceChannel
+} from 'discord.js';
+
+import { channels } from '../config/config';
 
 /**
  * Config interface for client.
@@ -27,6 +32,11 @@ export interface IConfig {
      * The mongodb url
      */
     mongoUrl: string
+
+    /**
+     * channels for the bot
+     */
+    channels: channels
 }
 
 /**
@@ -67,6 +77,13 @@ export interface ICommandInfo {
 
     /** Requirements of the command */
     context?: ICommandRequire
+
+    /**
+     * Wether to use the command as a slash command or a message command
+     */
+    type?: 'MESSAGE' | 'BOTH' | 'SLASH'
+
+    slashOptions?: ApplicationCommandOption[]
 }
 
 /**

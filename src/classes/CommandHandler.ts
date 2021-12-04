@@ -82,6 +82,16 @@ export default class CommandHandler {
             }
             return
         }
+        if (cmd.info.type === 'SLASH')
+            return message.reply({
+                embeds: [
+                    {
+                        color: 'ORANGE',
+                        title: '🚨 Error',
+                        description: `${message.author}, This command is only usable with slash commands. Please use the command via its slash command.`
+                    }
+                ]
+            })
         if (cmd.info.context?.guildOnly === true && message.channel.type !== 'GUILD_TEXT') {
             return await message.channel.send({
                 embeds: [

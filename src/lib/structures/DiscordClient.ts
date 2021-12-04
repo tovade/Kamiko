@@ -1,10 +1,12 @@
-import { Client, HexColorString, Intents, IntentsString } from 'discord.js'
-import Logger from '../../classes/Logger'
+import { Client, HexColorString, Intents, IntentsString } from 'discord.js';
 
-import Registry from '../../classes/Registry'
-import { IConfig } from '../../utils/interfaces'
-import { GuildDatabaseManager } from '../../database/Manager/GuildManager'
-import { UserDatabaseManager } from '../../database/Manager/UserManager'
+import Logger from '../../classes/Logger';
+import Registry from '../../classes/Registry';
+import config from '../../config/config';
+import { GuildDatabaseManager } from '../../database/Manager/GuildManager';
+import { UserDatabaseManager } from '../../database/Manager/UserManager';
+import { IConfig } from '../../utils/interfaces';
+
 export class DiscordClient extends Client {
     /**
      * Registry of the client.
@@ -41,7 +43,8 @@ export class DiscordClient extends Client {
             developers: JSON.parse(process.env.DEVELOPERS as string) as string[],
             unknownErrorMessage: JSON.parse(process.env.UNKNOWN_COMMAND_ERROR as string),
             color: `#${process.env.MAINCOLOR}` as HexColorString,
-            mongoUrl: process.env.MONGODB as string
+            mongoUrl: process.env.MONGODB as string,
+            channels: config.channels
         }
 
         /**

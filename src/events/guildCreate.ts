@@ -1,7 +1,9 @@
-import { Guild, GuildMember, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from 'discord.js'
+import {
+    Guild, GuildMember, MessageActionRow, MessageButton, MessageEmbed, TextChannel
+} from 'discord.js';
 
-import { DiscordClient } from '../lib/structures/DiscordClient'
-import Event from '../lib/structures/Event'
+import { DiscordClient } from '../lib/structures/DiscordClient';
+import Event from '../lib/structures/Event';
 
 export default class GuildCreate extends Event {
     constructor(client: DiscordClient) {
@@ -23,7 +25,8 @@ export default class GuildCreate extends Event {
             .addField('**Server ID**', guild.id, true)
             .addField('**Owner**', `Tag - ${owner.user.tag}\nID - ${owner.id}`, true)
             .addField('**Members**', `${guild.memberCount} `, true)
-        ;(this.client.channels.cache.get('909510786387419176') as TextChannel).send({ embeds: [embed] })
+
+        ;(this.client.channels.cache.get(this.client.config.channels.guildCreate) as TextChannel).send({ embeds: [embed] })
     }
     async sendMessage(guild: Guild) {
         const invite = new MessageButton()

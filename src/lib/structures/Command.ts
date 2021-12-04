@@ -1,4 +1,4 @@
-import { GuildMember, Message, TextChannel } from 'discord.js'
+import { CommandInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js'
 
 import Logger from '../../classes/Logger'
 import { isUserDeveloper } from '../../utils/functions'
@@ -44,12 +44,12 @@ export default abstract class Command {
      * @param message Message object
      * @param checkNsfw Checking nsfw channel
      */
-    isUsable(message: Message, checkNsfw: boolean = false): boolean {
+    isUsable(message: Message | CommandInteraction, checkNsfw: boolean = false): boolean {
         if (this.info.enabled === false) return false
-        if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as TextChannel).nsfw && !isUserDeveloper(this.client, message.author.id)) return false
+        if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as TextChannel).nsfw && !isUserDeveloper(this.client, message.member?.user.id as string)) return false
         if (this.info.context) {
-            if (this.info.context.developer && !isUserDeveloper(this.client, message.author.id)) return false
-            if (this.info.context.permissions && !isUserDeveloper(this.client, message.author.id)) {
+            if (this.info.context.developer && !isUserDeveloper(this.client, message.member?.user.id as string)) return false
+            if (this.info.context.permissions && !isUserDeveloper(this.client, message.member?.user.id as string)) {
                 const perms: string[] = []
                 this.info.context.permissions.forEach(permission => {
                     if ((message.member as GuildMember).permissions.has(permission)) return
@@ -68,4 +68,10 @@ export default abstract class Command {
      * @param cancelCooldown Cancels cooldown when function called
      */
     abstract run(context: IContext, cancelCooldown?: () => void): Promise<any>
+
+    /**
+     * Runs the slash command.
+     * @param interaction Interaction
+     */
+    runSlash?(interaction: Interaction): Promise<any>
 }

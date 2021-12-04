@@ -1,7 +1,7 @@
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
-import { MessageEmbed, MessageButton, MessageActionRow } from 'discord.js'
+import { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction, User } from 'discord.js'
 export default class AvatarCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -10,7 +10,15 @@ export default class AvatarCommand extends Command {
             description: 'Get the avatar of an user',
             context: {
                 member: true
-            }
+            },
+            type: 'BOTH',
+            slashOptions: [
+                {
+                    name: 'user',
+                    description: 'the user to get the avatar from',
+                    type: 'USER'
+                }
+            ]
         })
     }
     //As an example on how to cancel cooldowns
@@ -43,5 +51,37 @@ export default class AvatarCommand extends Command {
         ])
 
         ctx.message.channel.send({ embeds: [embed], components: [row] })
+    }
+    async runSlash(interaction: CommandInteraction) {
+        const user = (interaction.options.getUser('user', false) as User) || (interaction.member?.user as User)
+        let embed = new MessageEmbed()
+            .setColor(this.client.config.color)
+            .setTitle(`<:info:905435119253344316> • ${user?.username}'s Avatar`)
+            .setDescription(`\`Click the button below to download!\``)
+            .setFooter('Request by ' + user.tag, user.displayAvatarURL())
+            .setImage(user?.avatarURL({ size: 2048, dynamic: true, format: 'png' }) as string)
+
+        const row = new MessageActionRow().addComponents([
+            new MessageButton()
+                .setURL(user?.displayAvatarURL({ size: 2048, dynamic: true, format: 'png' }) as string)
+                .setLabel('PNG')
+                .setStyle('LINK'),
+            new MessageButton()
+                .setURL(user?.displayAvatarURL({ size: 2048, dynamic: true, format: 'jpg' }) as string)
+                .setLabel('JPG')
+                .setStyle('LINK'),
+            new MessageButton()
+                .setURL(user?.displayAvatarURL({ size: 2048, dynamic: true, format: 'webp' }) as string)
+                .setLabel('WEBP')
+                .setStyle('LINK'),
+            new MessageButton()
+                .setURL(user?.displayAvatarURL({ size: 2048, dynamic: true, format: 'gif' }) as string)
+                .setLabel('GIF')
+                .setStyle('LINK')
+        ])
+        interaction.reply({
+            embeds: [embed],
+            components: [row]
+        })
     }
 }

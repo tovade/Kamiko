@@ -1,6 +1,8 @@
-import * as DJS from 'discord.js'
-import { DiscordClient } from '../lib/structures/DiscordClient'
-import { Helper } from '../lib/structures/Helper'
+import * as DJS from 'discord.js';
+
+import { DiscordClient } from '../lib/structures/DiscordClient';
+import { Helper } from '../lib/structures/Helper';
+
 export interface Reminder {
     _id: string
     /**

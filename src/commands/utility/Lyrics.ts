@@ -65,6 +65,7 @@ export default class TestCommand extends Command {
                 n++
                 LyricsSub.push(line)
             }
+            984
         }
         pagination(
             message,

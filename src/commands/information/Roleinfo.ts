@@ -1,8 +1,10 @@
-import { PermissionString, MessageEmbed } from 'discord.js'
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext, Permissions } from '../../utils/interfaces'
-import moment from 'moment'
+import { MessageEmbed, PermissionString } from 'discord.js';
+import moment from 'moment';
+
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext, Permissions } from '../../utils/interfaces';
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -64,7 +66,7 @@ export default class TestCommand extends Command {
 
             const embed = new MessageEmbed()
 
-                .setTitle(`Role Info !!`)
+                .setTitle(`Role Info`)
                 .setThumbnail(message.guild?.iconURL({ dynamic: true, size: 1024 }) as string)
                 .addField('Name', `<@&${role?.id}>`, true)
                 .addField('ID', `\`${role?.id}\``, true)
