@@ -6,6 +6,7 @@ import config from '../../config/config';
 import { GuildDatabaseManager } from '../../database/Manager/GuildManager';
 import { UserDatabaseManager } from '../../database/Manager/UserManager';
 import { IConfig } from '../../utils/interfaces';
+import ModClient, { WarnClient } from '../mod/ModClient';
 
 export class DiscordClient extends Client {
     /**
@@ -25,6 +26,10 @@ export class DiscordClient extends Client {
         guilds: new GuildDatabaseManager(),
         users: new UserDatabaseManager()
     }
+
+    public moderator: ModClient
+
+    public warnClient: WarnClient
 
     /**
      * Logger for the client
@@ -61,5 +66,12 @@ export class DiscordClient extends Client {
          * The logger
          */
         this.logger = Logger
+
+        /**
+         * The moderation client for the actions!
+         */
+        this.moderator = new ModClient(this)
+
+        this.warnClient = new WarnClient(this)
     }
 }

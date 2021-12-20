@@ -1,9 +1,12 @@
-import 'moment-duration-format'
+import 'moment-duration-format';
 
-import moment from 'moment-timezone'
+import {
+    Channel, GuildMember, Message, NewsChannel, PartialDMChannel, Role, TextChannel, ThreadChannel
+} from 'discord.js';
+import moment from 'moment-timezone';
 
-import { DiscordClient } from '../lib/structures/DiscordClient'
-import { Role, Message, GuildMember, Channel, TextChannel, ThreadChannel, NewsChannel, PartialDMChannel } from 'discord.js'
+import { DiscordClient } from '../lib/structures/DiscordClient';
+
 const isConstructorProxyHandler = {
     construct() {
         return Object.prototype
@@ -50,18 +53,13 @@ export function formatSeconds(seconds: number, format: string = 'Y [year] M [mon
     return newStr.trim()
 }
 
-export async function findMember(message: Message, args: string[], allowAuthor: boolean = false): Promise<GuildMember | null | undefined> {
+export function findMember(message: Message, args: string[], allowAuthor: boolean = false): GuildMember | null | undefined {
     let member
-
     member =
-        message.mentions.members?.first() ||
+        message.guild?.members.cache.get(getMemberFromMention(message)?.id as string) ||
         message.guild?.members.cache.get(args[0]) ||
-        message.guild?.members.cache.find(m => m.user.id === args[0]) ||
         message.guild?.members.cache.find(m => m.user.tag === args[0]) ||
         message.guild?.members.cache.find(m => m.user.username === args[0])
-    if (member?.partial) {
-        member = await member.fetch()
-    }
     if (!member && allowAuthor) {
         member = message.member
     }
@@ -95,4 +93,16 @@ export function findRole(message: Message, args: string[], allowRole: boolean = 
         role = message.member?.roles.highest
     }
     return role
+}
+
+export function getMemberFromMention(message: Message) {
+    const mention = message.mentions.members?.first() || message.mentions.members?.first(1)[1]
+    if (!mention) return
+    const obj = {
+        id: mention?.id,
+        user: message.client.users.cache.get(mention.id),
+        member: mention
+    }
+
+    return obj
 }

@@ -99,6 +99,11 @@ export interface ICommandRequire {
     permissions?: PermissionString[]
 
     /**
+     * permissions the client needs to be able to function
+     */
+    clientPermissions?: PermissionString[]
+
+    /**
      * Command requires a member to be runnable
      */
     member?: boolean

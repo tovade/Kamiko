@@ -1,8 +1,14 @@
-import { Guild, GuildMember, Permissions, MessageButton, MessageActionRow, Message, MessageEmbed, TextChannel } from 'discord.js'
-import leven from '../utils/leven'
-import { DiscordClient } from '../lib/structures/DiscordClient'
-import { formatSeconds, isUserDeveloper, findChannel, findMember, findRole } from '../utils/functions'
-import { IContext } from '../utils/interfaces'
+import {
+    Guild, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Permissions,
+    TextChannel
+} from 'discord.js';
+
+import { DiscordClient } from '../lib/structures/DiscordClient';
+import {
+    findChannel, findMember, findRole, formatSeconds, isUserDeveloper
+} from '../utils/functions';
+import { IContext } from '../utils/interfaces';
+import leven from '../utils/leven';
 
 export default class CommandHandler {
     /**
@@ -134,6 +140,23 @@ export default class CommandHandler {
                         ]
                     })
             }
+            if (cmd.info.context.clientPermissions) {
+                const perms: string[] = []
+                cmd.info.context.clientPermissions.forEach(permission => {
+                    if ((message.guild?.me as GuildMember).permissions.has(permission)) return
+                    else return perms.push(`\`${permission}\``)
+                })
+                if (perms.length)
+                    return await message.channel.send({
+                        embeds: [
+                            {
+                                color: '#FCE100',
+                                title: '⚠️ Missing Permissions',
+                                description: `${message.author}, I must have these permissions to run this command.\n\n${perms.join('\n')}`
+                            }
+                        ]
+                    })
+            }
             if (cmd.info.context.member) {
                 const requir = await findMember(message, args, true)
                 if (!requir)
@@ -151,7 +174,7 @@ export default class CommandHandler {
                     member: requir
                 }
             } else if (cmd.info.context.channel) {
-                const requir = await findChannel(message, args, false)
+                const requir = await findChannel(message, args, true)
                 if (!requir)
                     return await message.channel.send({
                         embeds: [

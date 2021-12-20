@@ -1,9 +1,9 @@
-import { CommandInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js'
+import { CommandInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js';
 
-import Logger from '../../classes/Logger'
-import { isUserDeveloper } from '../../utils/functions'
-import { ICommandInfo, IContext } from '../../utils/interfaces'
-import { DiscordClient } from './DiscordClient'
+import Logger from '../../classes/Logger';
+import { isUserDeveloper } from '../../utils/functions';
+import { ICommandInfo, IContext } from '../../utils/interfaces';
+import { DiscordClient } from './DiscordClient';
 
 export default abstract class Command {
     /**
@@ -27,7 +27,7 @@ export default abstract class Command {
      * @param error Error message
      */
     async onError(message: Message, error: any) {
-        Logger.log('ERROR', `An error occurred in "${this.info.name}" command.\n${error}\n`, true)
+        Logger.log('ERROR', `An error occurred in "${this.info.name}" command.\n${error.stack}\n`, true)
         await message.channel.send({
             embeds: [
                 {

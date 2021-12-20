@@ -1,6 +1,6 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -15,7 +15,7 @@ export default class TestCommand extends Command {
         })
     }
     //As an example on how to cancel cooldowns
-    async run(ctx: IContext, cancelCooldown: () => void) {
+    async run(ctx: IContext) {
         await ctx.message.reply(`the prefix here is${(await this.client.databases.guilds.get(ctx.message.guildId as string)).prefix}`)
     }
 }

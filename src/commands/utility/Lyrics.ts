@@ -1,10 +1,10 @@
-import { MessageEmbed } from 'discord.js'
-import axios from 'axios'
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
+import axios from 'axios';
+import { MessageEmbed } from 'discord.js';
 
-import { pagination } from '../../utils/pagination'
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
+import { pagination } from '../../utils/pagination';
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -35,7 +35,7 @@ export default class TestCommand extends Command {
                     }
                 ]
             })
-        if (data.lyrics.length < 2000) {
+        if (data.lyrics.length < 4000) {
             return message.channel.send({
                 embeds: [
                     {
@@ -56,16 +56,15 @@ export default class TestCommand extends Command {
             })
         }
         const LyricsArray = data.lyrics.split('\n')
-        const LyricsSub: string[] = []
+        const LyricsSub: string[] = ['']
         let n = 0
         for (const line of LyricsArray) {
-            if (LyricsSub[n].length + line.length < 2000) {
+            if (LyricsSub[n].length + line.length < 4000) {
                 LyricsSub[n] = LyricsSub[n] + line + '\n'
             } else {
                 n++
                 LyricsSub.push(line)
             }
-            984
         }
         pagination(
             message,
