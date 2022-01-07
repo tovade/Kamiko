@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import Command from '../../lib/structures/Command';
 import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext, Permissions } from '../../utils/interfaces';
+import { IContext } from '../../utils/interfaces';
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -21,7 +21,7 @@ export default class TestCommand extends Command {
         try {
             const role = ctx.mentions.role
             const { message } = ctx
-            const permissions: Permissions = {
+            const permissions: any = {
                 ADMINISTRATOR: 'Administrator',
                 VIEW_AUDIT_LOG: 'View Audit Log',
                 VIEW_GUILD_INSIGHTS: 'View Server Insights',
@@ -56,10 +56,10 @@ export default class TestCommand extends Command {
             }
 
             const rolePermissions = role?.permissions.toArray()
-            const finalPermissions = []
+            const finalPermissions: string[] = []
             for (const permission in permissions) {
-                if (rolePermissions?.includes(permission as PermissionString)) finalPermissions.push(`✔️ ${(permissions as any)[permission]}`)
-                else finalPermissions.push(`❌ ${(permissions as any)[permission]}`)
+                if (rolePermissions?.includes(permission as PermissionString)) finalPermissions.push(`✔️ ${permissions[permission]}`)
+                else finalPermissions.push(`❌ ${permissions[permission]}`)
             }
 
             const position = `\`${message.guild?.roles.cache.size! - role?.position!}\`/\`${message.guild?.roles.cache.size}\``

@@ -1,6 +1,7 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
+import GuildModel from '../../database/models/Guild';
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
 
 export default class PrefixCommand extends Command {
     constructor(client: DiscordClient) {
@@ -30,8 +31,7 @@ export default class PrefixCommand extends Command {
                 ]
             })
 
-        await this.client.databases.guilds.set(message.guildId as string, 'prefix', args[0])
-
+        const g = await GuildModel.findOneAndUpdate({ id: message.guildId }, { prefix: args[0] })
         return message.channel.send({
             embeds: [
                 {

@@ -3,6 +3,7 @@ import {
     TextChannel
 } from 'discord.js';
 
+import GuildModel from '../database/models/Guild';
 import { DiscordClient } from '../lib/structures/DiscordClient';
 import {
     findChannel, findMember, findRole, formatSeconds, isUserDeveloper
@@ -30,7 +31,8 @@ export default class CommandHandler {
             })
         let prefix
         if (message.guild?.name) {
-            prefix = (await client.databases.guilds.get(message.guildId as string)).prefix as unknown as string
+            const gModel = await GuildModel.findOne({ id: message.guildId })
+            prefix = gModel.prefix
         } else return
         const prefixMention = new RegExp(`^<@!?${client.user?.id}>( |)$`)
         if (message.content.match(prefixMention)) {

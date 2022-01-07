@@ -2,11 +2,10 @@ import {
     CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Role,
     Snowflake, TextChannel
 } from 'discord.js';
-import { getMongoRepository } from 'typeorm';
 
 import { bold } from '@discordjs/builders';
 
-import { Warnings } from '../../database/Entities/WarnEntities';
+import Warnings from '../../database/models/Warns';
 import { DiscordClient } from '../structures/DiscordClient';
 
 export default class ModClient {
@@ -193,7 +192,7 @@ export class WarnClient {
     constructor(client: DiscordClient) {
         this.client = client
         setTimeout(() => {
-            this.model = getMongoRepository(Warnings)
+            this.model = Warnings
         }, 5000)
     }
     async add(guildID: Snowflake, id: Snowflake, content: any, author: GuildMember) {
@@ -210,12 +209,11 @@ export class WarnClient {
                 date: new Date().toLocaleDateString(),
                 id: 0
             }
-            data = this.model.create({
+            data = new Warnings({
                 guildID,
                 id,
                 content: [d]
-            })
-            this.model.save(data)
+            }).save()
         } else {
             const d: any = {
                 moderatorID: author.id,
@@ -225,7 +223,7 @@ export class WarnClient {
                 id: m.content.length + 1
             }
             m.content.push(d)
-            this.model.save(m)
+            m.save()
         }
         return data
     }
@@ -250,7 +248,7 @@ export class WarnClient {
         } else {
             try {
                 m.content.splice(warnID, 1)
-                this.model.save(m)
+                m.save()
                 return m
             } catch {
                 return false

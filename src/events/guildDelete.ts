@@ -1,5 +1,6 @@
 import { Guild, MessageEmbed, TextChannel } from 'discord.js';
 
+import GuildModel from '../database/models/Guild';
 import { DiscordClient } from '../lib/structures/DiscordClient';
 import Event from '../lib/structures/Event';
 
@@ -13,6 +14,7 @@ export default class GuildCreate extends Event {
     }
     async sendMessage(guild: Guild) {
         const owner = await guild.fetchOwner()
+        await GuildModel.findOneAndDelete({ id: guild.id })
         const embed = new MessageEmbed()
             .setTitle('Left a Server')
             .setColor('RED')

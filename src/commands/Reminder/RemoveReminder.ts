@@ -1,6 +1,8 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
+import UserModel from '../../database/models/User';
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -17,14 +19,11 @@ export default class TestCommand extends Command {
     async run(ctx: IContext) {
         const [id] = ctx.args
         try {
-            const user = await this.client.databases.users.get(ctx.message.author.id)
+            const user = await UserModel.findOne({ id: ctx.message.author?.id as string })
             if (!user) return
             if (!user?.reminder.hasReminder === false) return ctx.message.reply("You don't have any reminders")
             if (id === 'all') {
-                await this.client.databases.users.set(ctx.message.author.id, 'reminder', {
-                    hasReminder: false,
-                    reminders: []
-                })
+                await UserModel.findOneAndUpdate({ id: ctx.message.author.id }, { reminder: { hasReminder: false, reminders: [] } })
 
                 return ctx.message.reply({ content: 'All your reminders have been deleted.' })
             }
@@ -42,10 +41,10 @@ export default class TestCommand extends Command {
                     break
                 }
             }
-            await this.client.databases.users.set(ctx.message.author.id, 'reminder', {
-                hasReminder: (user.reminder.reminders?.length as any) - 1 > 0,
-                reminders: user.reminder.reminders?.filter((r: any) => (r as any).id !== +id)
-            })
+            await UserModel.findOneAndUpdate(
+                { id: ctx.message.author.id },
+                { reminder: { hasReminder: (user.reminder.reminders?.length as any) - 1 > 0, reminders: user.reminder.reminders?.filter((r: any) => (r as any).id !== +id) } }
+            )
         } catch (err) {
             ctx.message.channel.send('An unexpected error has occured!')
         }

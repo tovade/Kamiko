@@ -1,5 +1,6 @@
 import * as DJS from 'discord.js';
 
+import UserModel from '../database/models/User';
 import { DiscordClient } from '../lib/structures/DiscordClient';
 import { Helper } from '../lib/structures/Helper';
 
@@ -24,13 +25,10 @@ export default class ReminderHelper extends Helper {
 
     async execute() {
         setInterval(async () => {
-            const remindersArray = await this.client.databases.users.repository.find({
-                select: ['reminder']
-            })
-            const reminders = remindersArray.filter(u => u.reminder.hasReminder === true)
-            if (!reminders) return
-
-            reminders.forEach((user: any) => {
+            const Reminders = await UserModel.find({ reminder: { hasReminder: true } })
+            if (!Reminders.length) return
+            if (!Reminders) return
+            Reminders.forEach((user: any) => {
                 user.reminder.reminders
                     .filter((r: any) => r.ends_at <= Date.now())
                     .forEach(async (reminder: Reminder) => {
@@ -39,18 +37,26 @@ export default class ReminderHelper extends Helper {
                         const channel = this.client.channels.cache.get(channel_id)
 
                         if (!channel) {
-                            await this.client.databases.users.set(user_id, 'reminder', {
-                                hasReminder: !(user.reminder.reminders?.length - 1 === 0),
-                                reminders: user.reminder.reminders.filter((rem: Reminder) => rem.id !== reminderId)
-                            })
+                            await UserModel.findOneAndUpdate(
+                                { id: user_id },
+                                {
+                                    reminder: {
+                                        hasReminder: !(user.reminder.reminders?.length - 1 === 0),
+                                        reminders: user.reminder.reminders.filter((rem: Reminder) => rem.id !== reminderId)
+                                    }
+                                }
+                            )
                             return
                         }
-
-                        await this.client.databases.users.set(user_id, 'reminder', {
-                            hasReminder: !(user.reminder.reminders?.length - 1 === 0),
-                            reminders: user.reminder.reminders.filter((rem: Reminder) => rem.id !== reminderId)
-                        })
-
+                        UserModel.findOneAndUpdate(
+                            { id: user_id },
+                            {
+                                reminder: {
+                                    hasReminder: !(user.reminder.reminders?.length - 1 === 0),
+                                    reminders: user.reminder.reminders.filter((rem: Reminder) => rem.id !== reminderId)
+                                }
+                            }
+                        )
                         const embed = new DJS.MessageEmbed()
                             .setAuthor(this.client.user?.username as string, this.client.user?.displayAvatarURL({ format: 'png' }))
                             .setTitle('Reminder finished')

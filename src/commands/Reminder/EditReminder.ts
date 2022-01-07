@@ -1,7 +1,10 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
-import ms from 'ms'
+import ms from 'ms';
+
+import UserModel from '../../database/models/User';
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -18,7 +21,7 @@ export default class TestCommand extends Command {
     async run(ctx: IContext) {
         const [id, time, description] = ctx.args
         try {
-            const user = await this.client.databases.users.get(ctx.message.author.id)
+            const user = await UserModel.findOne({ id: ctx.message.author.id })
             if (!user.reminder.hasReminder) return ctx.message.reply('You do not have any reminders active.')
             const reminder = user.reminder.reminders?.find((r: any) => (r as any).id === +id)
             const updated = user.reminder.reminders?.filter((r: { id: number }) => r.id !== +id)
@@ -35,10 +38,15 @@ export default class TestCommand extends Command {
                 guild_id: ctx.message.guildId,
                 user_id: user.id
             }
-            await this.client.databases.users.set(ctx.message.author.id, 'reminder', {
-                hasReminder: true,
-                reminders: [...(updated ?? []), newReminder]
-            })
+            await UserModel.findOneAndUpdate(
+                { id: ctx.message.author.id },
+                {
+                    reminder: {
+                        hasReminder: true,
+                        reminders: [...(updated ?? []), newReminder]
+                    }
+                }
+            )
             return ctx.message.channel.send('Updated your reminder :)')
         } catch (err) {
             return ctx.message.reply('Unexpected error has occured.')

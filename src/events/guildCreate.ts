@@ -2,6 +2,7 @@ import {
     Guild, GuildMember, MessageActionRow, MessageButton, MessageEmbed, TextChannel
 } from 'discord.js';
 
+import GuildModel from '../database/models/Guild';
 import { DiscordClient } from '../lib/structures/DiscordClient';
 import Event from '../lib/structures/Event';
 
@@ -42,13 +43,12 @@ export default class GuildCreate extends Event {
             ch => ch.type === 'GUILD_TEXT' && ch.permissionsFor(guild.members.cache.get(this.client.user?.id as string) as GuildMember).has(['SEND_MESSAGES', 'EMBED_LINKS'])
         )
         if (!channeltosend) return
+        const data = new GuildModel({ id: guild.id }).save()
         ;(channeltosend as TextChannel).send({
             embeds: [
                 new MessageEmbed()
                     .setDescription(
-                        `**Thanks for adding me to your server!**\n\n*My prefix is:* \`${(await this.client.databases.guilds.get(guild.id)).prefix}\`\n\n*To get started type* \`${
-                            (await this.client.databases.guilds.get(guild.id)).prefix
-                        }help\` *to see my commands*\n\n*If you have any questions or need help make sure to join the support server*`
+                        `**Thanks for adding me to your server!**\n\n*My prefix is:* \`${data.prefix}\`\n\n*To get started type* \`${data.prefix}help\` *to see my commands*\n\n*If you have any questions or need help make sure to join the support server*`
                     )
                     .setColor(this.client.config.color)
             ],

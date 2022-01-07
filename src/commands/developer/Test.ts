@@ -16,6 +16,6 @@ export default class TestCommand extends Command {
     }
     //As an example on how to cancel cooldowns
     async run(ctx: IContext) {
-        await ctx.message.reply(`the prefix here is${(await this.client.databases.guilds.get(ctx.message.guildId as string)).prefix}`)
+        await ctx.message.reply(`the prefix here is your mom`)
     }
 }

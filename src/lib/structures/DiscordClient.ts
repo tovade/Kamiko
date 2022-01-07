@@ -3,8 +3,6 @@ import { Client, HexColorString, Intents, IntentsString } from 'discord.js';
 import Logger from '../../classes/Logger';
 import Registry from '../../classes/Registry';
 import config from '../../config/config';
-import { GuildDatabaseManager } from '../../database/Manager/GuildManager';
-import { UserDatabaseManager } from '../../database/Manager/UserManager';
 import { IConfig } from '../../utils/interfaces';
 import ModClient, { WarnClient } from '../mod/ModClient';
 
@@ -18,14 +16,6 @@ export class DiscordClient extends Client {
      * Config of the client.
      */
     readonly config: IConfig
-
-    /**
-     * Client databases
-     */
-    public databases = {
-        guilds: new GuildDatabaseManager(),
-        users: new UserDatabaseManager()
-    }
 
     public moderator: ModClient
 

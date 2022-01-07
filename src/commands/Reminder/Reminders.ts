@@ -1,9 +1,12 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
-import { findMember } from '../../utils/functions'
-import moment from 'moment'
-import { GuildMember, MessageEmbed } from 'discord.js'
+import { GuildMember, MessageEmbed } from 'discord.js';
+import moment from 'moment';
+
+import UserModel from '../../database/models/User';
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { findMember } from '../../utils/functions';
+import { IContext } from '../../utils/interfaces';
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -17,7 +20,7 @@ export default class TestCommand extends Command {
         try {
             const { message, args } = ctx
             const member = await findMember(message, args, true)
-            const user = await this.client.databases.users.get(member?.id as string)
+            const user = await UserModel.findOne({ id: member?.id as string })
             if (user.reminder.hasReminder === false) {
                 return message.reply('This user has no reminders.')
             }
