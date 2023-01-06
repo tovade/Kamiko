@@ -1,6 +1,7 @@
-import { createConnection } from 'typeorm'
-import { DiscordClient } from '../lib/structures/DiscordClient'
-import { resolve } from 'path'
+import { resolve } from 'path';
+import { createConnection } from 'typeorm';
+
+import { DiscordClient } from '../lib/structures/DiscordClient';
 
 export class InitDatabase {
     static async Init(client: DiscordClient) {
@@ -23,7 +24,7 @@ export class InitDatabase {
                 client.logger.log('ERROR', 'could not connect to database, exiting')
                 return process.exit(1)
             })
-            .then(() => {
+            .then(connection => {
                 for (const database of Object.values(client.databases)) {
                     database._init()
                 }
