@@ -6,6 +6,7 @@ import config from '../../config/config';
 import { GuildDatabaseManager } from '../../database/Manager/GuildManager';
 import { UserDatabaseManager } from '../../database/Manager/UserManager';
 import { IConfig } from '../../utils/interfaces';
+import VSCodeExtensions from '../api/vscode';
 import ModClient, { WarnClient } from '../mod/ModClient';
 
 export class DiscordClient extends Client {
@@ -31,6 +32,9 @@ export class DiscordClient extends Client {
 
     public warnClient: WarnClient
 
+    public custom_api: {
+        vscode: VSCodeExtensions
+    }
     /**
      * Logger for the client
      */
@@ -73,5 +77,9 @@ export class DiscordClient extends Client {
         this.moderator = new ModClient(this)
 
         this.warnClient = new WarnClient(this)
+
+        this.custom_api = {
+            vscode: new VSCodeExtensions()
+        }
     }
 }

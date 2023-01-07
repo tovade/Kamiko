@@ -17,17 +17,7 @@ export default class CommandHandler {
      */
     static async handleCommand(client: DiscordClient, message: Message) {
         const self = (message.guild as Guild).me as GuildMember
-        if (!self.permissions.has(Permissions.FLAGS.SEND_MESSAGES) || !(message.channel as TextChannel).permissionsFor(self)?.has(Permissions.FLAGS.SEND_MESSAGES)) return
-        if (!self.permissions.has(Permissions.FLAGS.SEND_MESSAGES) || !self.permissions.has(Permissions.FLAGS.READ_MESSAGE_HISTORY))
-            return await message.channel.send({
-                embeds: [
-                    {
-                        color: 'RED',
-                        title: '🚨 Missing Permission',
-                        description: `${message.author}, bot requires \`READ_MESSAGE_HISTORY\` or \`SEND_MESSAGE\` permission to be run.`
-                    }
-                ]
-            })
+        if (!self.permissions.has(Permissions.FLAGS.SEND_MESSAGES) && !(message.channel as TextChannel).permissionsFor(self)?.has(Permissions.FLAGS.SEND_MESSAGES)) return
         let prefix
         if (message.guild?.name) {
             prefix = (await client.databases.guilds.get(message.guildId as string)).prefix as unknown as string

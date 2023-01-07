@@ -106,3 +106,26 @@ export function getMemberFromMention(message: Message) {
 
     return obj
 }
+
+export function createOptionHandler(structureName: string, structureOptions: any, options: any = {}) {
+    if (!options.optionalOptions && typeof options === 'undefined') {
+        throw new Error(`The options of structure "${structureName}" is required.`)
+    }
+
+    return {
+        optional(name: any, defaultValue: any = null) {
+            const value = structureOptions[name]
+
+            return typeof value === 'undefined' ? defaultValue : value
+        },
+
+        required(name: any) {
+            const value = structureOptions[name]
+
+            if (typeof value === 'undefined') {
+                throw new Error(`The option "${name}" of structure "${structureName}" is required.`)
+            }
+            return value
+        }
+    }
+}
