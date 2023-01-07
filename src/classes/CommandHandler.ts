@@ -37,7 +37,7 @@ export default class CommandHandler {
             let ping = new MessageEmbed()
                 .setAuthor(client.user?.username as string, client.user?.displayAvatarURL({ dynamic: true }))
                 .setTitle(`Hello! I am ${client.user?.username} My prefix is ${prefix}`)
-                .addField('Usage:', `${prefix}help`)
+                .addField('Usage:', `\`${prefix}help\``)
                 .setDescription('Make sure to check out the links down below!')
                 .setFooter(message.guild?.name as string)
                 .setTimestamp()
@@ -214,7 +214,7 @@ export default class CommandHandler {
                         {
                             color: '#FCE100',
                             title: '⚠ Missing Arguments.',
-                            description: `${message.author}, You must give ${cmd.info.context.args} arguments to run this command! If you don't know which arguments use !help [command] to see the full usage.`
+                            description: `${message.author}, You must give ${cmd.info.context.args} arguments to run this command! If you don't know which arguments use ${prefix}help [command] to see the full usage.`
                         }
                     ]
                 })

@@ -26,7 +26,7 @@ export default class TestCommand extends Command {
                 .setColor(this.client.config.color)
                 .setTitle('Warnings')
                 .setDescription(
-                    `${warnings.content.map((w: any, i: any) => `**ID:** ${i}\n**Moderator:** ${w.moderatorTAG}\n**Date:** ${w.date}\n**Reason:** ${w.reason}\n`).join(' ')}`
+                    `${warnings.content.map((w: any, i: any) => `**ID:** ${w.id}\n**Moderator:** ${w.moderatorTAG}\n**Date:** ${w.date}\n**Reason:** ${w.reason}\n`).join(' ')}`
                 )
                 .setFooter('© Kamiko')
         } else if (!warnings || !warnings.length) {

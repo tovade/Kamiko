@@ -12,8 +12,8 @@ export default class TestCommand extends Command {
             description: 'Lock a channel.',
             examples: ['!lock '],
             context: {
-                clientPermissions: ['MANAGE_MESSAGES'],
-                permissions: ['MANAGE_MESSAGES'],
+                clientPermissions: ['MANAGE_CHANNELS'],
+                permissions: ['MANAGE_CHANNELS'],
                 channel: true
             }
         })
