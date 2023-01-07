@@ -1,9 +1,11 @@
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
-import { MessageEmbed } from 'discord.js'
-import moment from 'moment'
-import { pagination } from '../../utils/pagination'
+import { MessageEmbed } from 'discord.js';
+import moment from 'moment';
+
+import Command from '../../lib/structures/Command';
+import { DiscordClient } from '../../lib/structures/DiscordClient';
+import { IContext } from '../../utils/interfaces';
+import { pagination } from '../../utils/pagination';
+
 export default class UserInfoCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -25,7 +27,7 @@ export default class UserInfoCommand extends Command {
         const bot = user?.bot ? 'Yes' : 'No'
 
         const user_embed = new MessageEmbed({
-            title: `👱 user information 👱`,
+            title: `User information`,
             fields: [
                 {
                     name: '**Name:**',
@@ -71,7 +73,7 @@ export default class UserInfoCommand extends Command {
         const joined_at = moment(member?.joinedTimestamp).format('LLLL')
 
         const member_embed = new MessageEmbed({
-            title: `👱 member information 👱`,
+            title: `Member information`,
             fields: [
                 {
                     name: '**Nickname:**',
