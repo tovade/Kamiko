@@ -214,7 +214,7 @@ export default class CommandHandler {
                         {
                             color: '#FCE100',
                             title: '⚠ Missing Arguments.',
-                            description: `${message.author}, You must give ${cmd.info.context.args} arguments to run this command! If you don't know which arguments use ${prefix}help [command] to see the full usage.`
+                            description: `${message.author}, You must give ${cmd.info.context.args} arguments to run this command! If you don't know which arguments use \`${prefix}help ${cmd.info.name}\` to see the full usage.`
                         }
                     ]
                 })
