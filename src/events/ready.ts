@@ -1,10 +1,10 @@
-import { ApplicationCommandData, ApplicationCommandOption } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOption } from 'discord.js'
 
-import Logger from '../classes/Logger';
-import config from '../config/config';
-import { InitDatabase } from '../database/DatabaseConnection';
-import { DiscordClient } from '../lib/structures/DiscordClient';
-import Event from '../lib/structures/Event';
+import Logger from '../classes/Logger'
+import config from '../config/config'
+import { InitDatabase } from '../lib/database/DatabaseConnection'
+import { DiscordClient } from '../lib/structures/DiscordClient'
+import Event from '../lib/structures/Event'
 
 export default class ReadyEvent extends Event {
     constructor(client: DiscordClient) {

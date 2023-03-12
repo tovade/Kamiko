@@ -1,5 +1,5 @@
-import { Snowflake } from 'discord.js'
-import { Entity, Column, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm'
+import { Snowflake } from 'discord.js';
+import { Column, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'guilds' })
 export class GuildSetting {
@@ -11,4 +11,7 @@ export class GuildSetting {
 
     @Column('string')
     public prefix = 'k.'
+
+    @Column('string')
+    public language = 'en_US'
 }

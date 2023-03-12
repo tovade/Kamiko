@@ -26,7 +26,7 @@ export default class RebootCommand extends Command {
         this.client.registry.reregisterAll()
 
         this.client.login(this.client.config.token).then(async () => {
-            this.client.emit('ready')
+            this.client.emit('ready' as any)
 
             await message.channel.send({
                 embeds: [

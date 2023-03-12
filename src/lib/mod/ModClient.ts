@@ -1,13 +1,10 @@
-import {
-    CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Role,
-    Snowflake, TextChannel
-} from 'discord.js';
-import { getMongoRepository } from 'typeorm';
+import { CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Role, Snowflake, TextChannel } from 'discord.js'
+import { getMongoRepository } from 'typeorm'
 
-import { bold } from '@discordjs/builders';
+import { bold } from '@discordjs/builders'
 
-import { Warnings } from '../../database/Entities/WarnEntities';
-import { DiscordClient } from '../structures/DiscordClient';
+import { Warnings } from '../database/Entities/WarnEntities'
+import { DiscordClient } from '../structures/DiscordClient'
 
 export default class ModClient {
     public client: DiscordClient

@@ -1,7 +1,7 @@
-import { resolve } from 'path';
-import { createConnection } from 'typeorm';
+import { resolve } from 'path'
+import { createConnection } from 'typeorm'
 
-import { DiscordClient } from '../lib/structures/DiscordClient';
+import { DiscordClient } from '../structures/DiscordClient'
 
 export class InitDatabase {
     static async Init(client: DiscordClient) {

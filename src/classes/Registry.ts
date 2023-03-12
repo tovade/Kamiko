@@ -2,7 +2,7 @@ import { Collection } from 'discord.js'
 import path from 'path'
 import requireAll from 'require-all'
 
-import RegistryError from '../errors/RegistryError'
+import RegistryError from '../lib/errors/RegistryError'
 import Command from '../lib/structures/Command'
 import { DiscordClient } from '../lib/structures/DiscordClient'
 import Event from '../lib/structures/Event'
