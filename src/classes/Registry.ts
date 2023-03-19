@@ -1,4 +1,4 @@
-import { Collection } from 'discord.js'
+import { ClientEvents, Collection } from 'discord.js'
 import path from 'path'
 import requireAll from 'require-all'
 
@@ -93,7 +93,9 @@ export default class Registry {
         if (this.events.some(e => e.name === event.name)) throw new RegistryError(`A event with the name "${event.name}" is already registered.`)
 
         this.events.set(event.name, event)
-        this.client.on(event.name, event.run.bind(event))
+        event.emitter
+            ? event.emitter[event.type](event.name, (...params: any[]) => event.run(...params))
+            : this.client[event.type](event.name as keyof ClientEvents, (...params: any) => event.run(...params))
         Logger.log('INFO', `Event "${event.name}" loaded.`)
     }
 
@@ -203,7 +205,6 @@ export default class Registry {
             groups.push(command.info.name)
             this.groups.set(command.info.group, groups)
         }
-        Logger.log('INFO', `Command "${command.info.name}" loaded.`)
     }
 
     /**
@@ -282,6 +283,7 @@ export default class Registry {
 
             this.registerCommand(command)
         }
+        Logger.log('INFO', `Registered ${commands.length} commands.`)
     }
 
     /**

@@ -1,11 +1,11 @@
-import { stripIndent } from 'common-tags';
-import { MessageEmbed } from 'discord.js';
-import moment from 'moment';
-import { cpu, mem, os } from 'node-os-utils';
+import { stripIndent } from 'common-tags'
+import { MessageEmbed } from 'discord.js'
+import moment from 'moment'
+import { cpu, mem, os } from 'node-os-utils'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -30,14 +30,14 @@ export default class TestCommand extends Command {
         Commands     :: ${this.client.registry.commands.size}
         Events       :: ${this.client.registry.events.size} 
         `
-        const { totalMemMb, usedMemMb } = await mem.info()
+        const { totalMemMb } = await mem.info()
         const serverStats = stripIndent`
         OS           :: ${await os.oos()}
         CPU          :: ${cpu.model()}
         Cores        :: ${cpu.count()}
         Cpu Usage    :: ${await cpu.usage()} %
-        Memory       :: ${totalMemMb} MB
-        Memory Usage :: ${usedMemMb} MB     
+        Memory       :: ${Math.round(totalMemMb)} MB
+        Memory Usage :: ${Math.round(process.memoryUsage().heapTotal / 1000000)} MB     
         `
 
         const embed = new MessageEmbed()

@@ -1,11 +1,14 @@
-import { Interaction } from 'discord.js';
+import { Interaction } from 'discord.js'
 
-import { DiscordClient } from '../lib/structures/DiscordClient';
-import Event from '../lib/structures/Event';
+import { DiscordClient } from '../lib/structures/DiscordClient'
+import Event from '../lib/structures/Event'
 
 export default class InteractionEvent extends Event {
     constructor(client: DiscordClient) {
-        super(client, 'interactionCreate')
+        super(client, {
+            name: 'interactionCreate',
+            type: 'on'
+        })
     }
 
     async run(interaction: Interaction) {

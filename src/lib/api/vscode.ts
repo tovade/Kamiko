@@ -1,6 +1,6 @@
-import { APIWrapper } from '../structures/ApiBase';
+import axios from 'axios'
 
-const axios = require('axios')
+import { APIWrapper } from '../structures/ApiBase'
 
 const API_URL = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery'
 

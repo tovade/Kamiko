@@ -6,7 +6,10 @@ import Event from '../lib/structures/Event'
 
 export default class MessageEvent extends Event {
     constructor(client: DiscordClient) {
-        super(client, 'messageCreate')
+        super(client, {
+            name: 'messageCreate',
+            type: 'on'
+        })
     }
 
     async run(message: Message) {

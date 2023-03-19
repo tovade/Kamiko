@@ -1,11 +1,14 @@
-import { Guild, MessageEmbed, TextChannel } from 'discord.js';
+import { Guild, MessageEmbed, TextChannel } from 'discord.js'
 
-import { DiscordClient } from '../lib/structures/DiscordClient';
-import Event from '../lib/structures/Event';
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import Event from '../../lib/structures/Event'
 
 export default class GuildCreate extends Event {
     constructor(client: DiscordClient) {
-        super(client, 'guildDelete')
+        super(client, {
+            name: 'guildDelete',
+            type: 'on'
+        })
     }
 
     async run(guild: Guild) {

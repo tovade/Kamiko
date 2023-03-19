@@ -8,7 +8,10 @@ import Event from '../lib/structures/Event'
 
 export default class ReadyEvent extends Event {
     constructor(client: DiscordClient) {
-        super(client, 'ready')
+        super(client, {
+            name: 'ready',
+            type: 'on'
+        })
     }
 
     async run() {
