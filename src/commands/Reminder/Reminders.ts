@@ -1,9 +1,11 @@
+import { GuildMember, MessageEmbed } from 'discord.js'
+import moment from 'moment'
+
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { IContext } from '../../utils/interfaces'
 import { findMember } from '../../utils/functions'
-import moment from 'moment'
-import { GuildMember, MessageEmbed } from 'discord.js'
+import { IContext } from '../../utils/interfaces'
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -16,7 +18,7 @@ export default class TestCommand extends Command {
     async run(ctx: IContext) {
         try {
             const { message, args } = ctx
-            const member = await findMember(message, args, true)
+            const member = await findMember(message, args.getAll(), true)
             const user = await this.client.databases.users.get(member?.id as string)
             if (user.reminder.hasReminder === false) {
                 return message.reply('This user has no reminders.')

@@ -1,9 +1,9 @@
-import chroma from 'chroma-js';
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import chroma from 'chroma-js'
+import { CommandInteraction, MessageEmbed } from 'discord.js'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class ColorCommand extends Command {
     constructor(client: DiscordClient) {
@@ -29,7 +29,7 @@ export default class ColorCommand extends Command {
 
     async run(ctx: IContext) {
         const { message, args } = ctx
-        const color = chroma(args[0])
+        const color = chroma(args.getAll()[0])
 
         const preview = `https://api.no-api-key.com/api/v2/color?hex=${color.hex().split('#')[1]}`
 

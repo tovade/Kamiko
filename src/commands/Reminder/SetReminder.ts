@@ -1,7 +1,9 @@
+import ms from 'ms'
+
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
-import ms from 'ms'
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -18,7 +20,7 @@ export default class TestCommand extends Command {
     async run(ctx: IContext) {
         try {
             const { message, args } = ctx
-            const [time, ...rest] = args
+            const [time, ...rest] = args.getAll()
             const msg = rest.join(' ')
             const isValid = ms(time)
             if (!isValid) return message.reply('Are you sure that is a valid time?')

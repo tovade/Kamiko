@@ -1,9 +1,9 @@
-import { GuildMember, MessageEmbed, Snowflake } from 'discord.js';
+import { GuildMember, MessageEmbed, Snowflake } from 'discord.js'
 
-import { WarnClient } from '../../lib/mod/ModClient';
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import { WarnClient } from '../../lib/mod/ModClient'
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -19,7 +19,7 @@ export default class TestCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        let reason = ctx.args.join(' ')
+        let reason = ctx.args.getAll().join(' ')
         if (!reason) reason = 'Not provided'
         const data = await this.client.warnClient.add(
             ctx.message.guildId as Snowflake,

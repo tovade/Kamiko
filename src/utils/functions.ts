@@ -1,11 +1,9 @@
-import 'moment-duration-format';
+import 'moment-duration-format'
 
-import {
-    Channel, GuildMember, Message, NewsChannel, PartialDMChannel, Role, TextChannel, ThreadChannel
-} from 'discord.js';
-import moment from 'moment-timezone';
+import { Channel, DMChannel, GuildMember, Message, NewsChannel, PartialDMChannel, Role, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js'
+import moment from 'moment-timezone'
 
-import { DiscordClient } from '../lib/structures/DiscordClient';
+import { DiscordClient } from '../lib/structures/DiscordClient'
 
 const isConstructorProxyHandler = {
     construct() {
@@ -67,7 +65,11 @@ export function findMember(message: Message, args: string[], allowAuthor: boolea
     return member
 }
 
-export function findChannel(message: Message, args: string[], allowChannel: boolean = false): TextChannel | ThreadChannel | Channel | undefined | NewsChannel | PartialDMChannel {
+export function findChannel(
+    message: Message,
+    args: string[],
+    allowChannel: boolean = false
+): TextChannel | ThreadChannel | Channel | undefined | NewsChannel | DMChannel | VoiceChannel | PartialDMChannel {
     let channel
 
     channel =

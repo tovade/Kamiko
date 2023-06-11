@@ -1,8 +1,8 @@
-import { GuildMember } from 'discord.js';
+import { GuildMember } from 'discord.js'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -19,7 +19,7 @@ export default class TestCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        const reason = ctx.args.slice(0).join(' ')
+        const reason = ctx.args.getAll().slice(0).join(' ')
         const member = ctx.mentions.member
         this.client.moderator.kick(ctx.message, member as GuildMember, reason)
     }

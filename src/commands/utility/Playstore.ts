@@ -1,9 +1,9 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
-import PlayStore, { IAppItem } from 'google-play-scraper';
+import { CommandInteraction, MessageEmbed } from 'discord.js'
+import PlayStore, { IAppItem } from 'google-play-scraper'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 export default class PlayStoreCommand extends Command {
     constructor(client: DiscordClient) {
@@ -32,7 +32,7 @@ export default class PlayStoreCommand extends Command {
         let data: IAppItem[]
         try {
             data = await PlayStore.search({
-                term: `${ctx.args.join(' ')}`,
+                term: `${ctx.args.getAll().join(' ')}`,
                 num: 1
             })
         } catch (error) {

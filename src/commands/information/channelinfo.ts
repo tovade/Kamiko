@@ -1,9 +1,10 @@
 import { Channel, ColorResolvable, MessageEmbed, StageChannel, TextChannel, VoiceChannel } from 'discord.js'
-const moment = require('moment')
+
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
 
+const moment = require('moment')
 const types = {
     GUILD_TEXT: '<:channel:905436084735979520> Text Channel',
     DM: 'Direct Message',
@@ -55,7 +56,7 @@ export default class ChannelInfoCommand extends Command {
                     },
                     {
                         name: '**Type:**',
-                        value: types[type] as string,
+                        value: (types as any)[type] as string,
                         inline: true
                     },
                     {
@@ -85,7 +86,7 @@ export default class ChannelInfoCommand extends Command {
                     },
                     {
                         name: '**Type:**',
-                        value: types[type] as string,
+                        value: (types as any)[type] as string,
                         inline: true
                     },
                     {
@@ -114,7 +115,7 @@ export default class ChannelInfoCommand extends Command {
                     },
                     {
                         name: '**Type:**',
-                        value: types[type] as string,
+                        value: (types as any)[type] as string,
                         inline: true
                     },
                     {
@@ -143,7 +144,7 @@ export default class ChannelInfoCommand extends Command {
                     },
                     {
                         name: '**Type:**',
-                        value: types[type] as string,
+                        value: (types as any)[type] as string,
                         inline: true
                     },
                     {

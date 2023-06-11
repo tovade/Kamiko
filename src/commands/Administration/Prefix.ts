@@ -17,8 +17,8 @@ export default class PrefixCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        const { message, args } = ctx
-
+        const { message } = ctx
+        const args = ctx.args.getAll()
         if (args[0].length > 6)
             return message.reply({
                 embeds: [

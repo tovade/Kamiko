@@ -1,6 +1,7 @@
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -15,7 +16,7 @@ export default class TestCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        const [id] = ctx.args
+        const [id] = ctx.args.getAll()
         try {
             const user = await this.client.databases.users.get(ctx.message.author.id)
             if (!user) return

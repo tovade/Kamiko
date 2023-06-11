@@ -1,7 +1,20 @@
 import {
-    ApplicationCommandOption, Channel, GuildMember, HexColorString, Message, NewsChannel,
-    PartialDMChannel, PermissionString, Role, TextChannel, ThreadChannel, User, VoiceChannel
-} from 'discord.js';
+    ApplicationCommandOption,
+    Channel,
+    GuildMember,
+    HexColorString,
+    Message,
+    NewsChannel,
+    PartialDMChannel,
+    PermissionString,
+    Role,
+    TextChannel,
+    ThreadChannel,
+    User,
+    VoiceChannel
+} from 'discord.js'
+
+import { Args } from '../lib/structures/Args'
 
 /**
  * Config interface for client.
@@ -137,7 +150,7 @@ export interface IContext {
     /**
      * Arguments
      */
-    args: string[]
+    args: Args
 
     /**
      * Mentions

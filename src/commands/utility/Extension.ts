@@ -1,8 +1,8 @@
-import { ColorResolvable, MessageEmbed } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
 
 const EXTENSION_URL = 'https://marketplace.visualstudio.com/items/'
 
@@ -54,7 +54,7 @@ export default class TestCommand extends Command {
         const embed = new MessageEmbed()
             .setColor('BLUE')
             .setTitle('Type a number to respond!')
-            .setAuthor(`Results: ${ctx.args.join(' ')}`, this.client.user?.displayAvatarURL())
+            .setAuthor(`Results: ${ctx.args.getAll().join(' ')}`, this.client.user?.displayAvatarURL())
             .setDescription(description.join('\n'))
         await ctx.message.channel.send({ embeds: [embed] })
         this.awaitResponseMessage(ctx, results)
@@ -83,7 +83,7 @@ export default class TestCommand extends Command {
         return `[${i.displayName} - ${i.publisher.displayName}](${EXTENSION_URL}${i.publisher.publisherName}.${i.extensionName})`
     }
     async findExtension(ctx: IContext) {
-        const res = await this.client.custom_api.vscode.search(ctx.args.join(' '))
+        const res = await this.client.custom_api.vscode.search(ctx.args.getAll().join(' '))
         return res.data.results[0].extensions
     }
     async handleResults(

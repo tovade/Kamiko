@@ -1,8 +1,9 @@
 import { CommandInteraction, Message, MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
-import { IContext } from '../../utils/interfaces'
+
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { formatSeconds } from '../../utils/functions'
+import { IContext } from '../../utils/interfaces'
 
 interface IGroup {
     name: string
@@ -66,9 +67,9 @@ export default class HelpCommand extends Command {
         const { message, args } = ctx
         const menu = this.createSelectMenu(message)
         const groups = this.getAvailableGroups(message)
-        if (!args[0]) return await this.sendHelpMessage(message, menu)
+        if (!args.getAll()[0]) return await this.sendHelpMessage(message, menu)
 
-        const command = this.client.registry.findCommand(args[0].toLocaleLowerCase())
+        const command = this.client.registry.findCommand(args.getAll()[0].toLocaleLowerCase())
         if (!command) return await this.sendHelpMessage(message, menu)
         var isAvailable = false
 

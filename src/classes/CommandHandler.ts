@@ -1,14 +1,10 @@
-import {
-    Guild, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Permissions,
-    TextChannel
-} from 'discord.js';
+import { Guild, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Permissions, TextChannel } from 'discord.js'
 
-import { DiscordClient } from '../lib/structures/DiscordClient';
-import {
-    findChannel, findMember, findRole, formatSeconds, isUserDeveloper
-} from '../utils/functions';
-import { IContext } from '../utils/interfaces';
-import leven from '../utils/leven';
+import { Args } from '../lib/structures/Args'
+import { DiscordClient } from '../lib/structures/DiscordClient'
+import { findChannel, findMember, findRole, formatSeconds, isUserDeveloper } from '../utils/functions'
+import { IContext } from '../utils/interfaces'
+import leven from '../utils/leven'
 
 export default class CommandHandler {
     /**
@@ -247,7 +243,7 @@ export default class CommandHandler {
 
             const context = {
                 message,
-                args,
+                args: new Args(client, args),
                 mentions
             }
 

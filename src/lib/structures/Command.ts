@@ -1,9 +1,9 @@
-import { CommandInteraction, GuildMember, Interaction, Message, TextChannel } from 'discord.js';
+import { CommandInteraction, GuildMember, Interaction, Message, TextBasedChannel, TextChannel } from 'discord.js'
 
-import Logger from '../../classes/Logger';
-import { isUserDeveloper } from '../../utils/functions';
-import { ICommandInfo, IContext } from '../../utils/interfaces';
-import { DiscordClient } from './DiscordClient';
+import Logger from '../../classes/Logger'
+import { isUserDeveloper } from '../../utils/functions'
+import { ICommandInfo, IContext } from '../../utils/interfaces'
+import { DiscordClient } from './DiscordClient'
 
 export default abstract class Command {
     /**
@@ -28,7 +28,7 @@ export default abstract class Command {
      */
     async onError(message: Message, error: any) {
         Logger.log('ERROR', `An error occurred in "${this.info.name}" command.\n${error.stack}\n`, true)
-        await message.channel.send({
+        await (message.channel as TextChannel).send({
             embeds: [
                 {
                     color: 'RED',
@@ -46,7 +46,8 @@ export default abstract class Command {
      */
     isUsable(message: Message | CommandInteraction, checkNsfw: boolean = false): boolean {
         if (this.info.enabled === false) return false
-        if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as TextChannel).nsfw && !isUserDeveloper(this.client, message.member?.user.id as string)) return false
+        if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as unknown as TextChannel).nsfw && !isUserDeveloper(this.client, message.member?.user.id as string))
+            return false
         if (this.info.context) {
             if (this.info.context.developer && !isUserDeveloper(this.client, message.member?.user.id as string)) return false
             if (this.info.context.permissions && !isUserDeveloper(this.client, message.member?.user.id as string)) {

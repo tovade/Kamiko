@@ -1,7 +1,9 @@
+import ms from 'ms'
+
 import Command from '../../lib/structures/Command'
 import { DiscordClient } from '../../lib/structures/DiscordClient'
 import { IContext } from '../../utils/interfaces'
-import ms from 'ms'
+
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
         super(client, {
@@ -16,7 +18,7 @@ export default class TestCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        const [id, time, description] = ctx.args
+        const [id, time, description] = ctx.args.getAll()
         try {
             const user = await this.client.databases.users.get(ctx.message.author.id)
             if (!user.reminder.hasReminder) return ctx.message.reply('You do not have any reminders active.')

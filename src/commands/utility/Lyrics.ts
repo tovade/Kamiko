@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { MessageEmbed } from 'discord.js';
+import axios from 'axios'
+import { MessageEmbed } from 'discord.js'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
-import { pagination } from '../../utils/pagination';
+import Command from '../../lib/structures/Command'
+import { DiscordClient } from '../../lib/structures/DiscordClient'
+import { IContext } from '../../utils/interfaces'
+import { pagination } from '../../utils/pagination'
 
 export default class TestCommand extends Command {
     constructor(client: DiscordClient) {
@@ -19,7 +19,7 @@ export default class TestCommand extends Command {
         })
     }
     async run(ctx: IContext) {
-        const query = ctx.args.join(' ')
+        const query = ctx.args.getAll().join(' ')
         const { message } = ctx
         const data: any = await axios
             .get(`https://some-random-api.ml/lyrics?title=${encodeURI(query)}`)
