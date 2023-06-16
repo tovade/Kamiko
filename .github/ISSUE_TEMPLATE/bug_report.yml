@@ -1,18 +1,3 @@
-name: Bug report
-description: Create a report to help us address an error.
-title: "[BUG] - "
-labels: ["🚦 status: awaiting triage"]
-assignees: tovade
-body:
-  - type: markdown
-    attributes:
-      value: "# Bug report"
-  - type: textarea
-    id: bugdescription
-    attributes:
-      label: What bug did you encounter?
-      description: |
-        Please provide a clear description of the bug.
 
         Include the steps you took to cause the bug, and an explanation of what occurred.
     validations:
