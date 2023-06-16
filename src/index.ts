@@ -1,23 +1,28 @@
 // Getting and validating .env file
-import EnvLoader from './classes/EnvLoader'
+import EnvLoader from './lib/utils/EnvLoader'
 EnvLoader.load()
 
 // Setting up moment-timezone
 import moment from 'moment-timezone'
 moment.locale('en')
 moment.tz.setDefault('Europe/Istanbul')
-import { database } from './database/DatabaseConnection'
+
 // Starting client
-import client from './client'
-database(client)
-client.login(client.config.token)
+import { KamikoClient } from './lib/KamikoClient'
 
-process.on('exit', () => {
-    client.destroy()
+const client = new KamikoClient({
+    auth: `Bot ${process.env.TOKEN}`,
+    gateway: {
+        intents: [
+            'GUILDS',
+            'GUILD_MESSAGES',
+            'GUILD_MESSAGE_REACTIONS',
+            'GUILD_MEMBERS',
+            'GUILD_PRESENCES',
+            'MESSAGE_CONTENT',
+            'AUTO_MODERATION_CONFIGURATION',
+            'AUTO_MODERATION_EXECUTION'
+        ]
+    }
 })
-// all the code below is from next server configuration all credits to CasperTheGhost#4546
-import config from './config/config'
-
-if (config.dash_enabled === 'true') {
-    import('./server').then(v => v.default(client))
-}
+client.connect()

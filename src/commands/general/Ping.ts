@@ -1,23 +1,18 @@
-import { IContext } from '../../utils/interfaces'
-import Command from '../../lib/structures/Command'
-import { DiscordClient } from '../../lib/structures/DiscordClient'
-import { CommandInteraction } from 'discord.js'
+import { AnyTextableChannel, Message, Uncached } from 'oceanic.js'
 
-export default class TestCommand extends Command {
-    constructor(client: DiscordClient) {
+import { KamikoClient } from '../../lib/KamikoClient'
+import { Args } from '../../lib/structures/Args'
+import Command from '../../lib/structures/Command'
+
+export default class PingCommand extends Command {
+    constructor(client: KamikoClient) {
         super(client, {
             name: 'ping',
-            group: 'General',
-            description: 'Ping command.',
-            cooldown: 5,
-            type: 'BOTH'
+            description: 'Pong!',
+            group: 'General'
         })
     }
-
-    async run(ctx: IContext) {
-        await ctx.message.reply(`My ping is \`${this.client.ws.ping}ms\``)
-    }
-    async runSlash(interaction: CommandInteraction) {
-        interaction.reply({ content: `My ping is \`${this.client.ws.ping}ms\`` })
+    run(message: Message<AnyTextableChannel | Uncached>, args: Args) {
+        console.log(args.get('string'))
     }
 }
