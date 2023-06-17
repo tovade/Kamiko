@@ -25,4 +25,4 @@ const client = new KamikoClient({
         ]
     }
 })
-client.connect()
+client.start()

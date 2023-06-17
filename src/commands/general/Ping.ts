@@ -1,6 +1,7 @@
 import { KamikoClient } from 'lib/KamikoClient'
 import { Args } from 'lib/structures/Args'
 import Command from 'lib/structures/Command'
+import { KamikoEmbed } from 'lib/structures/KamikoEmbed'
 import { AnyTextableChannel, Message, Uncached } from 'oceanic.js'
 
 export default class PingCommand extends Command {
@@ -12,6 +13,14 @@ export default class PingCommand extends Command {
         })
     }
     run(message: Message<AnyTextableChannel | Uncached>, args: Args) {
-        console.log(args.get('string'))
+        message.channel?.createMessage({
+            embeds: [
+                new KamikoEmbed()
+                    .setTitle('Pong!')
+                    .addDefaults(this.client)
+                    .setDescription(`**Latency:** ${message?.guild ? message.guild?.shard.latency : this.client.shards.first()?.latency}ms`)
+                    .toJSON()
+            ]
+        })
     }
 }

@@ -21,12 +21,24 @@ export class Args {
     }
 
     get(arg: string, opts: Omit<ArgumentContext, 'message' | 'command'> = {}) {
-        return this.client.registry.arguments
+        const parsedArg = this.client.registry.arguments
             .find(a => a.name === arg)
             ?.messageRun(this.args[0], {
                 message: this.options.message,
                 command: this.options.command,
                 ...opts
             })
+        this.args.shift()
+        return parsedArg
+    }
+    rest(arg: string, opts: Omit<ArgumentContext, 'message' | 'command'> = {}) {
+        const parsedArg = this.client.registry.arguments
+            .find(a => a.name === arg)
+            ?.messageRun(this.args.join(' '), {
+                message: this.options.message,
+                command: this.options.command,
+                ...opts
+            })
+        return parsedArg
     }
 }

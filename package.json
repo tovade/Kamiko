@@ -6,15 +6,19 @@
         "build": "tsc -p .",
         "start": "node dist/index.js",
         "dev": "nodemon -w ./src -w ./.env ./src/index.ts --use-transpile-only",
-        "test:tsc": "tsc --noEmit"
+        "test:tsc": "tsc --noEmit",
+        "generate": "prisma generate"
     },
     "author": "tovade",
     "license": "MIT",
     "dependencies": {
+        "@oceanicjs/builders": "^1.1.7",
         "@sapphire/result": "^2.6.4",
         "moment-timezone": "^0.5.43",
         "oceanic.js": "^1.7.0",
-        "require-all": "^3.0.0"
+        "require-all": "^3.0.0",
+        "tsconfig-paths": "^4.2.0",
+        "@prisma/client": "^4.15.0"
     },
     "devDependencies": {
         "@casper124578/eslint-config": "^1.0.0",
@@ -24,6 +28,7 @@
         "dotenv": "^16.0.3",
         "nodemon": "^2.0.6",
         "prettier": "^2.5.0",
+        "prisma": "^4.15.0",
         "rimraf": "^3.0.2",
         "ts-node": "^9.0.0",
         "typescript": "^4.1.2"

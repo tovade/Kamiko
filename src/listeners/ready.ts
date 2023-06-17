@@ -1,3 +1,5 @@
+import Logger from 'lib/utils/Logger'
+
 import { KamikoClient } from '../lib/KamikoClient'
 import Listener from '../lib/structures/Listener'
 
@@ -9,6 +11,7 @@ export default class ReadyListener extends Listener<'ready'> {
         })
     }
     run() {
-        console.log(`Logged in as ${this.client.user.tag}`)
+        Logger.log('SUCCESS', `Logged in as ${this.client.user.tag}!`)
+        Logger.log('INFO', `Took ${(this.client.startTime % 60000) / 10000}s to start!`)
     }
 }
