@@ -1,6 +1,6 @@
 import { Interaction, Message } from 'oceanic.js'
+import { ICommandInfo } from 'utils/types'
 
-import { ICommandInfo } from '../../utils/types'
 import { KamikoClient } from '../KamikoClient'
 import { Colors } from '../utils/Colors'
 import Logger from '../utils/Logger'

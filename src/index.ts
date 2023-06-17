@@ -1,5 +1,5 @@
 // Getting and validating .env file
-import EnvLoader from './lib/utils/EnvLoader'
+import EnvLoader from 'lib/utils/EnvLoader'
 EnvLoader.load()
 
 // Setting up moment-timezone
@@ -8,7 +8,7 @@ moment.locale('en')
 moment.tz.setDefault('Europe/Istanbul')
 
 // Starting client
-import { KamikoClient } from './lib/KamikoClient'
+import { KamikoClient } from 'lib/KamikoClient'
 
 const client = new KamikoClient({
     auth: `Bot ${process.env.TOKEN}`,

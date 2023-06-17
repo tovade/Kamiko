@@ -1,8 +1,7 @@
+import { KamikoClient } from 'lib/KamikoClient'
+import { Args } from 'lib/structures/Args'
+import Command from 'lib/structures/Command'
 import { AnyTextableChannel, Message, Uncached } from 'oceanic.js'
-
-import { KamikoClient } from '../../lib/KamikoClient'
-import { Args } from '../../lib/structures/Args'
-import Command from '../../lib/structures/Command'
 
 export default class PingCommand extends Command {
     constructor(client: KamikoClient) {

@@ -1,8 +1,8 @@
 import { ClientEvents, Collection } from 'oceanic.js'
 import path from 'path'
 import requireAll from 'require-all'
+import { isConstructor } from 'utils/functions'
 
-import { isConstructor } from '../../utils/functions'
 import RegistryError from '../errors/RegistryError'
 import { KamikoClient } from '../KamikoClient'
 import Logger from '../utils/Logger'

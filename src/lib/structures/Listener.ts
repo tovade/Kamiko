@@ -1,6 +1,6 @@
 import { ClientEvents } from 'oceanic.js'
+import { KamikoEvents } from 'utils/types'
 
-import { KamikoEvents } from '../../utils/types'
 import { KamikoClient } from '../KamikoClient'
 
 export interface ProcessEvents {

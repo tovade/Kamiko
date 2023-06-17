@@ -1,7 +1,6 @@
 import chalk from 'chalk'
 import moment from 'moment-timezone'
-
-import { LogType } from '../../utils/types'
+import { LogType } from 'utils/types'
 
 export default class Logger {
     /**

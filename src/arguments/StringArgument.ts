@@ -1,5 +1,5 @@
-import { KamikoClient } from '../lib/KamikoClient'
-import { Argument, ArgumentContext } from '../lib/structures/Argument'
+import { KamikoClient } from 'lib/KamikoClient'
+import { Argument, ArgumentContext } from 'lib/structures/Argument'
 
 export default class StringArgument extends Argument {
     constructor(client: KamikoClient) {

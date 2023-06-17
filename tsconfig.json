@@ -61,7 +61,11 @@
     "noEmit": false,
     "incremental": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "lib/*": ["./src/lib/*"],
+      "utils/*": ["./src/utils/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
