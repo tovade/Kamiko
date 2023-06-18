@@ -10,10 +10,11 @@ export default class MessageCreateListener extends Listener<'messageCreate'> {
             type: 'on'
         })
     }
-    run(message: Message<AnyTextableChannel | Uncached>) {
+    async run(message: Message<AnyTextableChannel | Uncached>) {
         if (message.author.bot) return
-        if (!message.content.startsWith('a!')) return
-        const [commandName, ...args] = message.content.slice('a!'.length).trim().split(/ +/g)
+        const prefix = await this.client.fetchPrefix(message)
+        if (!message.content.startsWith(prefix)) return
+        const [commandName, ...args] = message.content.slice(prefix.length).trim().split(/ +/g)
         const command = this.client.registry.commands.find(c => c.info.name === commandName)
         if (!command) return
         command.preMessageRun(message, args)

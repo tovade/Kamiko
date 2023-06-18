@@ -1,4 +1,6 @@
-import { Client, ClientOptions } from 'oceanic.js'
+import 'dotenv/config'
+
+import { Client, ClientOptions, Message } from 'oceanic.js'
 
 import { PrismaClient } from '@prisma/client'
 
@@ -40,8 +42,27 @@ export class KamikoClient extends Client {
         this.database = new PrismaClient()
     }
 
-    start() {
-        this.database.$connect()
+    async start() {
+        await this.database.$connect().then(c => Logger.log('INFO', 'Connected to database!'))
         this.connect()
+    }
+
+    async fetchPrefix(message: Message): Promise<string> {
+        const guild = await this.database.guild.findUnique({
+            where: {
+                id: message.guild?.id
+            }
+        })
+        if (!guild) {
+            await this.database.guild.create({
+                data: {
+                    id: message.guildID as string,
+                    prefix: process.env.PREFIX,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            })
+        }
+        return guild ? guild.prefix : (process.env.PREFIX as string)
     }
 }
