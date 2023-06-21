@@ -1,5 +1,7 @@
-import { Interaction, Message } from 'oceanic.js'
+import { CommandInteraction, Message } from 'oceanic.js'
 import { ICommandInfo } from 'utils/types'
+
+import { ApplicationCommandOptionBuilder } from '@oceanicjs/builders'
 
 import { KamikoClient } from '../KamikoClient'
 import { Colors } from '../utils/Colors'
@@ -55,9 +57,10 @@ export default abstract class Command {
      */
     abstract run(message: Message, args: Args): Promise<any> | any
 
+    registerSlashCommand?(): ApplicationCommandOptionBuilder
     /**
      * Runs the slash command.
      * @param interaction Interaction
      */
-    runSlash?(interaction: Interaction): Promise<any>
+    interactionRun?(interaction: CommandInteraction): Promise<any>
 }
