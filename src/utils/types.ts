@@ -48,6 +48,8 @@ export interface ICommandInfo {
      */
     type?: 'MESSAGE' | 'BOTH' | 'SLASH'
 
+    preconditions?: AvailablePreconditions[]
+
     slashOptions?: ApplicationCommandOptionsSubCommand[]
 }
 export enum CustomEvents {
@@ -63,4 +65,7 @@ declare module 'oceanic.js' {
     interface ClientEvents {
         [CustomEvents.argumentError]: [data: ArgumentErrorOptions]
     }
+}
+export enum AvailablePreconditions {
+    OwnerOnly = 'OwnerOnly'
 }

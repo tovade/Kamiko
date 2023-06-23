@@ -9,6 +9,7 @@ import Logger from '../utils/Logger'
 import { Argument } from './Argument'
 import Command from './Command'
 import Listener from './Listener'
+import { Precondition } from './PreCondition'
 
 export default class Registry {
     /**
@@ -32,9 +33,14 @@ export default class Registry {
     public listeners: Collection<string, Listener>
 
     /**
-     * Collection for helper registration.
+     * Collection for argument registration.
      */
     public arguments: Collection<string, Argument>
+
+    /**
+     * Collection for condition registration.
+     */
+    public conditions: Collection<string, Precondition>
 
     /**
      * Event paths
@@ -65,6 +71,7 @@ export default class Registry {
         this.groups = new Collection<string, string[]>()
         this.aliases = new Collection<string, Command>()
         this.arguments = new Collection<string, Argument>()
+        this.conditions = new Collection<string, Precondition>()
     }
 
     constructor(client: KamikoClient) {
@@ -153,6 +160,46 @@ export default class Registry {
             if (!(argument instanceof Argument)) throw new RegistryError(`Invalid event object to register: ${argument}`)
 
             this.registerArgument(argument)
+        }
+    }
+    /**
+     * Registers a single precondition
+     * @param precondition Precondition object
+     */
+    private registerCondition(precondition: Precondition) {
+        if (this.conditions.some(e => e.name === precondition.name)) throw new RegistryError(`A precondition with the name "${precondition.name}" is already registered.`)
+
+        this.conditions.set(precondition.name, precondition)
+        Logger.log('INFO', `Precondition "${precondition.name}" loaded.`)
+    }
+    /**
+     * Registers all arguments.
+     */
+    private registerAllPreconditions() {
+        const conditions: any[] = []
+        requireAll({
+            dirname: path.join(__dirname, '../../preconditions'),
+            recursive: true,
+            filter: /\w*.[tj]s/g,
+            resolve: x => conditions.push(x),
+            map: name => {
+                return name
+            }
+        })
+
+        for (let condition of conditions) {
+            const valid =
+                isConstructor(condition, Precondition) ||
+                isConstructor(condition.default, Precondition) ||
+                condition instanceof Precondition ||
+                condition.default instanceof Precondition
+            if (!valid) continue
+
+            if (isConstructor(condition, Precondition)) condition = new condition(this.client)
+            else if (isConstructor(condition.default, Precondition)) condition = new condition.default(this.client)
+            if (!(condition instanceof Precondition)) throw new RegistryError(`Invalid event object to register: ${condition}`)
+
+            this.registerCondition(condition)
         }
     }
     /**
@@ -263,6 +310,7 @@ export default class Registry {
         this.registerAllCommands()
         this.registerAllEvents()
         this.registerAllArguments()
+        this.registerAllPreconditions()
     }
 
     /**
