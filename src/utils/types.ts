@@ -37,13 +37,6 @@ export interface ICommandInfo {
     enabled?: boolean
 
     /**
-     * If enabled, command only runs in nsfw channels
-     *
-     * Developers are not affected
-     */
-    onlyNsfw?: boolean
-
-    /**
      * Wether to use the command as a slash command or a message command
      */
     type?: 'MESSAGE' | 'BOTH' | 'SLASH'

@@ -3,7 +3,6 @@ import { Args } from 'lib/structures/Args'
 import Command from 'lib/structures/Command'
 import { KamikoEmbed } from 'lib/structures/KamikoEmbed'
 import { AnyTextableChannel, ApplicationCommandOptionTypes, CommandInteraction, Message, Uncached } from 'oceanic.js'
-import { AvailablePreconditions } from 'utils/types'
 
 import { ApplicationCommandOptionBuilder } from '@oceanicjs/builders'
 
@@ -13,7 +12,8 @@ export default class PingCommand extends Command {
             name: 'ping',
             description: 'Pong!',
             group: 'General',
-            preconditions: [AvailablePreconditions.OwnerOnly]
+            preconditions: [],
+            cooldown: 10
         })
     }
     run(message: Message<AnyTextableChannel | Uncached>, args: Args) {

@@ -12,7 +12,6 @@ export class KamikoClient extends Client {
      * Logger for the client
      */
     logger: Logger
-
     /**
      * registry for the client
      *

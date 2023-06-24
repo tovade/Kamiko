@@ -13,12 +13,13 @@
     "license": "MIT",
     "dependencies": {
         "@oceanicjs/builders": "^1.1.7",
+        "@prisma/client": "^4.15.0",
         "@sapphire/result": "^2.6.4",
+        "moment-duration-format": "^2.3.2",
         "moment-timezone": "^0.5.43",
         "oceanic.js": "^1.7.0",
         "require-all": "^3.0.0",
-        "tsconfig-paths": "^4.2.0",
-        "@prisma/client": "^4.15.0"
+        "tsconfig-paths": "^4.2.0"
     },
     "devDependencies": {
         "@casper124578/eslint-config": "^1.0.0",
