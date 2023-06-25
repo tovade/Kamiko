@@ -16,7 +16,7 @@ export default class InteractionListener extends Listener<'interactionCreate'> {
 
             if (!cmd) return
 
-            if (cmd?.info.preconditions) {
+            if (cmd?.info.preconditions && cmd?.info.preconditions.length > 0) {
                 for (const condition of cmd.info.preconditions) {
                     const cond = this.client.registry.conditions.find(p => p.name === condition)
                     if (!cond) return
