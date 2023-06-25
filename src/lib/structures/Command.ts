@@ -1,22 +1,25 @@
-import { CommandInteraction, GuildMember, Interaction, Message, TextBasedChannel, TextChannel } from 'discord.js'
+import { CommandInteraction, Message } from 'oceanic.js'
+import { ICommandInfo } from 'utils/types'
 
-import Logger from '../../classes/Logger'
-import { isUserDeveloper } from '../../utils/functions'
-import { ICommandInfo, IContext } from '../../utils/interfaces'
-import { DiscordClient } from './DiscordClient'
+import { ApplicationCommandOptionBuilder } from '@oceanicjs/builders'
+
+import { KamikoClient } from '../KamikoClient'
+import { Colors } from '../utils/Colors'
+import Logger from '../utils/Logger'
+import { Args } from './Args'
 
 export default abstract class Command {
     /**
      * Discord client.
      */
-    readonly client: DiscordClient
+    readonly client: KamikoClient
 
     /**
      * Information of the command.
      */
     readonly info: ICommandInfo
 
-    constructor(client: DiscordClient, info: ICommandInfo) {
+    constructor(client: KamikoClient, info: ICommandInfo) {
         this.client = client
         this.info = info
     }
@@ -28,51 +31,36 @@ export default abstract class Command {
      */
     async onError(message: Message, error: any) {
         Logger.log('ERROR', `An error occurred in "${this.info.name}" command.\n${error.stack}\n`, true)
-        await (message.channel as TextChannel).send({
+        await message.channel?.createMessage({
             embeds: [
                 {
-                    color: 'RED',
+                    color: Colors.Red,
                     title: '💥 Oops...',
                     description: `${message.author}, an error occurred while running this command. Please try again later.`
                 }
             ]
         })
     }
+    preMessageRun(message: Message, args: string[]) {
+        const parsedargs = new Args(this.client, {
+            args,
+            message,
+            client: this.client,
+            command: this
+        })
 
-    /**
-     * Returns usability of the command
-     * @param message Message object
-     * @param checkNsfw Checking nsfw channel
-     */
-    isUsable(message: Message | CommandInteraction, checkNsfw: boolean = false): boolean {
-        if (this.info.enabled === false) return false
-        if (checkNsfw && this.info.onlyNsfw === true && !(message.channel as unknown as TextChannel).nsfw && !isUserDeveloper(this.client, message.member?.user.id as string))
-            return false
-        if (this.info.context) {
-            if (this.info.context.developer && !isUserDeveloper(this.client, message.member?.user.id as string)) return false
-            if (this.info.context.permissions && !isUserDeveloper(this.client, message.member?.user.id as string)) {
-                const perms: string[] = []
-                this.info.context.permissions.forEach(permission => {
-                    if ((message.member as GuildMember).permissions.has(permission)) return
-                    else return perms.push(permission)
-                })
-                if (perms.length) return false
-            }
-        }
-
-        return true
+        this.run(message, parsedargs)
     }
-
     /**
      * Runs the command.
-     * @param context Context
-     * @param cancelCooldown Cancels cooldown when function called
+     * @param message The message
      */
-    abstract run(context: IContext, cancelCooldown?: () => void): Promise<any>
+    abstract run(message: Message, args: Args): Promise<any> | any
 
+    registerSlashCommand?(): ApplicationCommandOptionBuilder
     /**
      * Runs the slash command.
      * @param interaction Interaction
      */
-    runSlash?(interaction: Interaction): Promise<any>
+    interactionRun?(interaction: CommandInteraction): Promise<any>
 }

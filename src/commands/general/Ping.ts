@@ -1,58 +1,38 @@
-import { CommandInteraction } from 'discord.js';
+import { KamikoClient } from 'lib/KamikoClient'
+import { Args } from 'lib/structures/Args'
+import Command from 'lib/structures/Command'
+import { KamikoEmbed } from 'lib/structures/KamikoEmbed'
+import { AnyTextableChannel, ApplicationCommandOptionTypes, CommandInteraction, Message, Uncached } from 'oceanic.js'
 
-import Command from '../../lib/structures/Command';
-import { DiscordClient } from '../../lib/structures/DiscordClient';
-import { IContext } from '../../utils/interfaces';
+import { ApplicationCommandOptionBuilder } from '@oceanicjs/builders'
 
-export default class TestCommand extends Command {
-    constructor(client: DiscordClient) {
+export default class PingCommand extends Command {
+    constructor(client: KamikoClient) {
         super(client, {
             name: 'ping',
+            description: 'Pong!',
             group: 'General',
-            description: 'Ping command.',
-            cooldown: 5,
-            type: 'BOTH'
+            preconditions: [],
+            cooldown: 10
         })
     }
-
-    async run(ctx: IContext) {
-        await ctx.message.reply({
+    run(message: Message<AnyTextableChannel | Uncached>, args: Args) {
+        message.channel?.createMessage({
             embeds: [
-                {
-                    color: 'DARK_BLUE',
-                    description: `**Latency:** \`${this.client.ws.ping}ms (${(this.client.ws.ping % 60000) / 1000}s)\`\n**Database Latency:** \`${await this.getDBPing(ctx)}ms\``,
-                    footer: {
-                        text: '© Kamiko'
-                    }
-                }
+                new KamikoEmbed()
+                    .setTitle('Pong!')
+                    .addDefaults(this.client)
+                    .setDescription(`**Latency:** ${message?.guild ? message.guild?.shard.latency : this.client.shards.first()?.latency}ms`)
+                    .toJSON()
             ]
         })
     }
-    async runSlash(interaction: CommandInteraction) {
-        interaction.reply({
-            embeds: [
-                {
-                    color: 'DARK_BLUE',
-                    description: `**Latency:** \`${this.client.ws.ping}ms (${(this.client.ws.ping % 60000) / 1000}s)\`\n**Database Latency:** \`${await this.getDBInteractionPing(
-                        interaction
-                    )}ms\``,
-                    footer: {
-                        text: '© Kamiko'
-                    }
-                }
-            ]
+    registerSlashCommand(): ApplicationCommandOptionBuilder<ApplicationCommandOptionTypes> {
+        return new ApplicationCommandOptionBuilder(ApplicationCommandOptionTypes.SUB_COMMAND, 'ping').setDescription('Ping command').setName('ping')
+    }
+    interactionRun(interaction: CommandInteraction): Promise<any> {
+        return interaction.createMessage({
+            content: 'Hello'
         })
-    }
-    async getDBPing(ctx: IContext) {
-        let dataPing = Date.now()
-        await this.client.databases.guilds.repository.findOne({ id: (ctx.message.guild as any).id })
-        let dataPingNow = Date.now()
-        return dataPingNow - dataPing
-    }
-    async getDBInteractionPing(interaction: CommandInteraction) {
-        let dataPing = Date.now()
-        await this.client.databases.guilds.repository.findOne({ id: (interaction.guild as any).id })
-        let dataPingNow = Date.now()
-        return dataPingNow - dataPing
     }
 }

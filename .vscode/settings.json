@@ -1,8 +1,6 @@
 {
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
     "importSorter.generalConfiguration.sortOnBeforeSave": true,
     "importSorter.generalConfiguration.exclude": ["src/index"]
 }

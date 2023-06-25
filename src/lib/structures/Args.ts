@@ -1,27 +1,44 @@
-import { DiscordClient } from './DiscordClient'
+import { Message } from 'oceanic.js'
 
+import { KamikoClient } from '../KamikoClient'
+import { ArgumentContext } from './Argument'
+import Command from './Command'
+
+export interface ArgsOptions {
+    args: string[]
+    message: Message
+    client: KamikoClient
+    command: Command
+}
 export class Args {
     args: string[]
-    client: DiscordClient
-    constructor(client: DiscordClient, args: string[]) {
-        ;(this.client = client), (this.args = args)
+    client: KamikoClient
+    options: ArgsOptions
+    constructor(client: KamikoClient, opts: ArgsOptions) {
+        this.client = client
+        this.options = opts
+        this.args = opts.args
     }
 
-    /**
-     * Get all flags in the message
-     * @returns {string[]} flags detected in the message
-     */
-    getFlags(): string[] {
-        const flags = this.args.filter(arg => arg.startsWith('--')).map(str => str.replace('--', ''))
-        return flags
+    get(arg: string, opts: Omit<ArgumentContext, 'message' | 'command'> = {}) {
+        const parsedArg = this.client.registry.arguments
+            .find(a => a.name === arg)
+            ?.messageRun(this.args[0], {
+                message: this.options.message,
+                command: this.options.command,
+                ...opts
+            })
+        this.args.shift()
+        return parsedArg
     }
-    /**
-     * all args without the flags
-     * @returns {string[]} args without flags
-     */
-    getAll(): string[] {
-        // args without flags
-        const args = this.args.filter(arg => !arg.startsWith('--'))
-        return args
+    rest(arg: string, opts: Omit<ArgumentContext, 'message' | 'command'> = {}) {
+        const parsedArg = this.client.registry.arguments
+            .find(a => a.name === arg)
+            ?.messageRun(this.args.join(' '), {
+                message: this.options.message,
+                command: this.options.command,
+                ...opts
+            })
+        return parsedArg
     }
 }

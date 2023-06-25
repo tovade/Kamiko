@@ -1,44 +1,37 @@
 {
-  "name": "kamiko",
-  "version": "0.5.0",
-  "description": "Discord bot made with Typescript",
-  "scripts": {
-    "build": "tsc -p .",
-    "start": "node dist/index.js",
-    "dev": "nodemon -w ./src -w ./.env ./src/index.ts --use-transpile-only "
-  },
-  "author": "tovade",
-  "license": "MIT",
-  "dependencies": {
-    "@discordjs/builders": "^0.8.2",
-    "axios": "^0.24.0",
-    "chalk": "^4.1.0",
-    "chroma-js": "^2.1.2",
-    "common-tags": "^1.8.2",
-    "discord.js": "13.1.0",
-    "dotenv": "^10.0.0",
-    "google-play-scraper": "^9.1.1",
-    "moment": "^2.29.1",
-    "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.33",
-    "mongodb": "^3.7.3",
-    "ms": "^2.1.3",
-    "node-os-utils": "^1.3.7",
-    "path": "^0.12.7",
-    "require-all": "^3.0.0",
-    "typeorm": "^0.2.40"
-  },
-  "devDependencies": {
-    "@types/chroma-js": "^2.1.3",
-    "@types/common-tags": "^1.8.1",
-    "@types/moment-duration-format": "^2.2.3",
-    "@types/ms": "^0.7.31",
-    "@types/node": "^14.14.10",
-    "@types/node-os-utils": "^1.3.0",
-    "@types/require-all": "^3.0.3",
-    "nodemon": "^2.0.6",
-    "rimraf": "^3.0.2",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.1.2"
-  }
+    "name": "kamiko",
+    "version": "0.5.0",
+    "description": "Discord bot made with Typescript",
+    "scripts": {
+        "build": "tsc -p .",
+        "start": "node dist/index.js",
+        "dev": "nodemon -w ./src -w ./.env ./src/index.ts --use-transpile-only",
+        "test:tsc": "tsc --noEmit",
+        "generate": "prisma generate"
+    },
+    "author": "tovade",
+    "license": "MIT",
+    "dependencies": {
+        "@oceanicjs/builders": "^1.1.7",
+        "@prisma/client": "^4.15.0",
+        "@sapphire/result": "^2.6.4",
+        "moment-duration-format": "^2.3.2",
+        "moment-timezone": "^0.5.43",
+        "oceanic.js": "^1.7.0",
+        "require-all": "^3.0.0",
+        "tsconfig-paths": "^4.2.0"
+    },
+    "devDependencies": {
+        "@casper124578/eslint-config": "^1.0.0",
+        "@types/ms": "^0.7.31",
+        "@types/node": "^14.14.10",
+        "@types/require-all": "^3.0.3",
+        "dotenv": "^16.0.3",
+        "nodemon": "^2.0.6",
+        "prettier": "^2.5.0",
+        "prisma": "^4.15.0",
+        "rimraf": "^3.0.2",
+        "ts-node": "^9.0.0",
+        "typescript": "^4.1.2"
+    }
 }
